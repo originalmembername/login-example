@@ -8,6 +8,8 @@
 </template>
 
 <script>
+/* eslint-disable no-debugger */
+import MockServerComp from '@/components/MockServerComp.vue'
     export default {
         name: 'LoginView',
         data() {
@@ -21,11 +23,12 @@
         methods: {
             login() {
               console.log("Username " + this.input.username)
-              console.log("MockAccount Username " + this.$parent.mockAccount.username)
+              console.log("MockAccount Username " + MockServerComp.data().username)
                 if(this.input.username != "" && this.input.password != "") {
-                    if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
+                    if(this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
+                        console.log("Login successful")
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "secure" });
+                        this.$router.replace({ name: "member" });
                     } else {
                         console.log("The username and / or password is incorrect");
                     }

@@ -1,16 +1,11 @@
 <script>
 export default {
-  name: 'MockServerComp',
+  name: "MockServerComp",
   data() {
-            return {
-                input: {
-                    username: "",
-                    password: ""
-                }
-            }
-        },
-  props: {
-    msg: String
-  }
-}
+    return {
+      username: "user",
+      password: "password",
+    };
+  },
+};
 </script>

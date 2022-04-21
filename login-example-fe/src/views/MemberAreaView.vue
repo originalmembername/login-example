@@ -1,5 +1,5 @@
 <template>
-    <div id="secure">
+    <div id="member-area">
         <h1>Secure Area</h1>
         <p>
             This is a secure area
