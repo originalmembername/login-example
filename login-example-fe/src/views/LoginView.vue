@@ -20,6 +20,8 @@
         },
         methods: {
             login() {
+              console.log("Username " + this.input.username)
+              console.log("MockAccount Username " + this.$parent.mockAccount.username)
                 if(this.input.username != "" && this.input.password != "") {
                     if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
                         this.$emit("authenticated", true);

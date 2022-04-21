@@ -20,7 +20,7 @@
             return {
                 authenticated: false,
                 mockAccount: {
-                    username: "nraboy",
+                    username: "user",
                     password: "password"
                 }
             }
