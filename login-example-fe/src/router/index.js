@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: '/member',
-    name: 'mamber',
+    name: 'member',
     component: MemberAreView
   }
 ]

@@ -28,7 +28,7 @@ import MockServerComp from '@/components/MockServerComp.vue'
                     if(this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
                         console.log("Login successful")
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "member" });
+                        this.$router.push("/member");
                     } else {
                         console.log("The username and / or password is incorrect");
                     }
