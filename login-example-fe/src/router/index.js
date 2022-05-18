@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberAreView from '../views/MemberAreaView.vue'
+import AuthComp from '../components/AuthComp.vue'
 
 const routes = [
   {
@@ -40,20 +41,20 @@ const router = createRouter({
 /**
  * Check for each routing if this component is restricted
  */
-// eslint-disable-next-line no-unused-vars
- router.beforeEach((to, from, next) => 
-{
-  // eslint-disable-next-line no-debugger
-  if(to.meta.requiresAuth){
-    console.log ("This page requires auth")
+router.beforeEach((to, _from, next) => {
+  console.log("Logged in: " + AuthComp.authStatus)
+
+  if (to.meta.requiresAuth && AuthComp.authStatus == false) {
+    console.log("Not authenticated, access denied")
+    router.push('/login')
   }
-  else{
-    console.log ("This page doesn't require auth")
-  }
-  // eslint-disable-next-line no-debugger
-  debugger
-  next()
+  else {
+    // eslint-disable-next-line no-debugger
+    //debugger
+    console.log("This page doesn't require auth, or we're logged in")
+    next()
+  }  
 }
-) 
+)
 
 export default router

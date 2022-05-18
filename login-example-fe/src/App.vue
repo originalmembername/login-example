@@ -10,20 +10,17 @@
 </template>
 
 <script>
-import router from '@/router/index.js'
 export default {
   name: "App",
   data() {
     return {
-      authenticated: false,
-      router: router
     };
   },
-  mounted() {
+/*   mounted() {
     if (!this.authenticated) {  
       this.$router.replace({ name: "login" });
     }
-  },
+  }, */
   methods: {
     setAuthenticated(status) {
       this.authenticated = status;
