@@ -1,8 +1,8 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link v-if="!authenticated" to="/login">Login</router-link>
-    <router-link v-if="authenticated" to="/login" v-on:click="logout()" replace
+    <router-link v-if="!authComp.authStatus" to="/login">Login</router-link>
+    <router-link v-if="authComp.authStatus" to="/login" v-on:click="logout()" replace
       >Logout</router-link
     >
   </nav>
@@ -10,10 +10,12 @@
 </template>
 
 <script>
+import AuthCompVue from './components/AuthComp.vue';
 export default {
   name: "App",
   data() {
     return {
+      authComp: AuthCompVue
     };
   },
 /*   mounted() {
@@ -23,10 +25,11 @@ export default {
   }, */
   methods: {
     setAuthenticated(status) {
-      this.authenticated = status;
+      this.authComp.authStatus = status;
+      console.log("Set Auth Status to: " + this.authComp.authStatus)
     },
     logout() {
-      this.authenticated = false;
+      this.authComp.authStatus = false;
     },
   },
 };

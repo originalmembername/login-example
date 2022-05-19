@@ -34,7 +34,6 @@ export default {
                     //this.$emit("authenticated", true);
                     AuthComp.authStatus = true
                     console.log("AuthComp.authenticated: " + AuthComp.authStatus)
-                    debugger
                     this.$router.push("/member");
                 } else {
                     console.log("The username and / or password is incorrect");
