@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberAreView from '../views/MemberAreaView.vue'
-import AuthComp from '../components/AuthComp.vue'
+import authComp from '@/components/authcomp.js'
 
 const routes = [
   {
@@ -38,13 +38,15 @@ const router = createRouter({
   routes
 })
 
+//const authComp = this.$root.$authComp
+
 /**
  * Check for each routing if this component is restricted
  */
 router.beforeEach((to, _from, next) => {
-  console.log("Logged in: " + AuthComp.authStatus)
+  console.log("Logged in: " + authComp.authStatus)
 
-  if (to.meta.requiresAuth && AuthComp.authStatus == false) {
+  if (to.meta.requiresAuth && authComp.authStatus == false) {
     console.log("Not authenticated, access denied")
     router.push('/login')
   }

@@ -1,10 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import AuthComp from './components/AuthComp.vue'
+import authcomp from './components/authcomp.js'
 
 //create app
-const app = createApp(App).use(router).mount('#app')
+const app = createApp(App)
 //add authComp to app
-const authComp = new AuthComp()
-app.provide('$authComp', authComp)
+app.config.globalProperties.$authComp = authcomp
+//Mount app
+app.use(router).mount('#app');

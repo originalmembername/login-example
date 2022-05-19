@@ -10,7 +10,7 @@
 <script>
 /* eslint-disable no-debugger */
 import MockServerComp from '@/components/MockServerComp.vue'
-import AuthComp from '@/components/AuthComp.vue'
+import authComp from '@/components/authcomp'
 export default {
     name: 'LoginView',
     data() {
@@ -32,8 +32,8 @@ export default {
                     console.log("Login successful")
                     //Set authenticated to "true"
                     //this.$emit("authenticated", true);
-                    AuthComp.authStatus = true
-                    console.log("AuthComp.authenticated: " + AuthComp.authStatus)
+                    authComp.authStatus = true
+                    console.log("authComp.authStatus: " + authComp.authStatus)
                     this.$router.push("/member");
                 } else {
                     console.log("The username and / or password is incorrect");
