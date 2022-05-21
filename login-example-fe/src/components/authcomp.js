@@ -1,4 +1,4 @@
 const authComp = new Object()
-authComp.authStatus = false
+authComp.isAuthenticated = false
 
 export default authComp

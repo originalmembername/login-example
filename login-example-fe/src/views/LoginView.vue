@@ -31,9 +31,10 @@ export default {
                 if (this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
                     console.log("Login successful")
                     //Set authenticated to "true"
-                    //this.$emit("authenticated", true);
-                    authComp.authStatus = true
-                    console.log("authComp.authStatus: " + authComp.authStatus)
+                    authComp.isAuthenticated = true
+                    console.log("authComp.isAuthenticated: " + authComp.isAuthenticated)
+                    //tell isAuthenticated to App component, so header can be adapted
+                    this.$emit("authenticated");
                     this.$router.push("/member");
                 } else {
                     console.log("The username and / or password is incorrect");

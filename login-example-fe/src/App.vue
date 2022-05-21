@@ -1,35 +1,39 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link v-if="!authComp.authStatus" to="/login">Login</router-link>
-    <router-link v-if="authComp.authStatus" to="/login" v-on:click="logout()" replace
+    <router-link v-if="!authenticated" to="/login">Login</router-link>
+    <router-link v-if="authenticated" to="/login" v-on:click="logout()" replace
       >Logout</router-link
     >
   </nav>
-  <router-view @authenticated="setAuthenticated" />
+  <router-view @authenticated="updateAuthStatus" />
 </template>
 
 <script>
-import AuthCompVue from './components/AuthComp.vue';
+import authComp from '@/components/authcomp.js'
+
 export default {
   name: "App",
   data() {
     return {
-      authComp: AuthCompVue
+      authenticated: authComp.isAuthenticated
     };
-  },
+  },  
+  
 /*   mounted() {
     if (!this.authenticated) {  
       this.$router.replace({ name: "login" });
     }
   }, */
   methods: {
-    setAuthenticated(status) {
-      this.authComp.authStatus = status;
-      console.log("Set Auth Status to: " + this.authComp.authStatus)
+    updateAuthStatus() {
+      this.authenticated = authComp.isAuthenticated;
+      console.log("Set Auth Status to: " + authComp.isAuthenticated)
     },
     logout() {
-      this.authComp.authStatus = false;
+      authComp.isAuthenticated = false
+      this.updateAuthStatus()
+      console.log("Auth Status after logout: " + authComp.isAuthenticated)
     },
   },
 };
