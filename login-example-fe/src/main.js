@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import authcomp from './components/authcomp.js'
+import authcomp from './components/Auth/authcomp.js'
 
 //create app
 const app = createApp(App)

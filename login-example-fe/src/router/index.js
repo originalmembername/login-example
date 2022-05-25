@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberAreView from '../views/MemberAreaView.vue'
-import authComp from '@/components/authcomp.js'
+import authComp from '@/components/Auth/authcomp.js'
 
 const routes = [
   {

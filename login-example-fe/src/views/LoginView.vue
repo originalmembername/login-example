@@ -9,7 +9,7 @@
 
 <script>
 /* eslint-disable no-debugger */
-import MockServerComp from '@/components/MockServerComp.vue'
+import MockServerComp from '@/components/Auth/MockServerComp.vue'
 import authComp from '@/components/authcomp'
 export default {
     name: 'LoginView',
