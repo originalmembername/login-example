@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 import authComp from './authcomp'
 
-export const handlers = [
+export const authHandlers = [
     // Handles a POST /login request
     rest.post('/login', (req, res, ctx) => {
         var user = req.user

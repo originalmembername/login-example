@@ -10,7 +10,7 @@
 <script>
 /* eslint-disable no-debugger */
 import MockServerComp from '@/components/Auth/MockServerComp.vue'
-import authComp from '@/components/authcomp'
+import authComp from '@/components/Auth/authcomp'
 export default {
     name: 'LoginView',
     data() {
@@ -22,7 +22,7 @@ export default {
         }
     },
     methods: {
-        login() {
+        async login() {
             //Get username and password
             console.log("Username " + this.input.username)
             console.log("MockAccount Username " + MockServerComp.data().username)

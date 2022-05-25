@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import authComp from '@/components/authcomp.js'
+import authComp from './components/Auth/authcomp';
 
 export default {
   name: "App",

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import authcomp from './components/Auth/authcomp.js'
+import {authServer} from './components/Auth/authServer.js'
 
 //create app
 const app = createApp(App)
@@ -9,3 +10,6 @@ const app = createApp(App)
 app.config.globalProperties.$authComp = authcomp
 //Mount app
 app.use(router).mount('#app');
+
+//start MockServer for user authentication
+authServer.listen()
