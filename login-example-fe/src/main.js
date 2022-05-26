@@ -4,6 +4,7 @@ import router from './router'
 import authcomp from './components/Auth/authcomp.js'
 import { setupWorker, rest } from 'msw'
 
+// Start the Mock Service Worker
 const worker = setupWorker(
   // Provide request handlers
   rest.get('/user/:userId', (req, res, ctx) => {
@@ -15,7 +16,6 @@ const worker = setupWorker(
     )
   }),
 )
-// Start the Mock Service Worker
 worker.start()
 
 
