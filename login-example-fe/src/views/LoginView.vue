@@ -9,8 +9,8 @@
 
 <script>
 /* eslint-disable no-debugger */
-import MockServerComp from '@/components/Auth/MockServerComp.vue'
-import authComp from '@/components/Auth/authcomp'
+import axios from 'axios';
+
 export default {
     name: 'LoginView',
     data() {
@@ -25,20 +25,43 @@ export default {
         async login() {
             //Get username and password
             console.log("Username " + this.input.username)
-            console.log("MockAccount Username " + MockServerComp.data().username)
             if (this.input.username != "" && this.input.password != "") {
-                //Check username & password
-                if (this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
-                    console.log("Login successful")
-                    //Set authenticated to "true"
-                    authComp.isAuthenticated = true
-                    console.log("authComp.isAuthenticated: " + authComp.isAuthenticated)
-                    //tell isAuthenticated to App component, so header can be adapted
-                    this.$emit("authenticated");
-                    this.$router.push("/member");
-                } else {
-                    console.log("The username and / or password is incorrect");
-                }
+
+                //send login request to server
+                axios.get('/login/auth', {
+                    params: {
+                        ID: 12345
+                    }
+                })
+                    .then(function (response) {
+                        console.log("Response: " + response);
+                    })
+
+
+
+                /* axios.post('https://localhost:8080/login/auth', {
+                    user: this.username,
+                    password: this.password
+                })
+                    .then(function (response) {
+                        console.log("Response: " + response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    }); */
+
+                /*  //Check username & password
+                 if (this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
+                     console.log("Login successful")
+                     //Set authenticated to "true"
+                     authComp.isAuthenticated = true
+                     console.log("authComp.isAuthenticated: " + authComp.isAuthenticated)
+                     //tell isAuthenticated to App component, so header can be adapted
+                     this.$emit("authenticated");
+                     this.$router.push("/member");
+                 } else {
+                     console.log("The username and / or password is incorrect");
+                 } */
             } else {
                 console.log("A username and password must be present");
             }

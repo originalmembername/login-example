@@ -3,9 +3,10 @@ import authComp from './authcomp'
 
 export const authHandlers = [
     // Handles a POST /login request
-    rest.post('/login', (req, res, ctx) => {
+    rest.post('https://localhost:8080/login/auth', (req, res, ctx) => {
         var user = req.user
         var pwd = req.password
+        console.log ("New login request, user: " + user)
 
         //check if user exists
         if (authComp.userExists(user)){
