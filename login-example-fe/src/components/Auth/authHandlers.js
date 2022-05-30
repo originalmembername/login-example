@@ -1,7 +1,29 @@
 import { rest } from 'msw'
-import authComp from './authcomp'
+//import authComp from './authcomp'
 
 export const authHandlers = [
+    rest.post('/login/auth', (req, res, ctx) => {
+        var user = req.body.params.user
+        var pwd = req.body.params.password
+        console.log ("New login request, user: " + user + " password: " + pwd)
+        return res(
+            ctx.json({
+                firstName: 'John',
+                lastName: 'Maverick',
+            }),
+        )
+    }),
+    rest.get('/login/auth2', (req, res, ctx) => {
+        return res(
+            ctx.json({
+                firstName: 'John2',
+                lastName: 'Maverick2',
+            }),
+        )
+    })
+]
+
+/* export const authHandlers = [
     // Handles a POST /login request
     rest.post('https://localhost:8080/login/auth', (req, res, ctx) => {
         var user = req.user
@@ -61,4 +83,4 @@ export const authHandlers = [
             ctx.json(authComp.users),
         )
     }),
-]
+] */

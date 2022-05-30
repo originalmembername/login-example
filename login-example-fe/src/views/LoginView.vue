@@ -24,13 +24,15 @@ export default {
     methods: {
         async login() {
             //Get username and password
-            console.log("Username " + this.input.username)
-            if (this.input.username != "" && this.input.password != "") {
+            let user = this.input.username
+            let pwd = this.input.password
+            if (user != "" && pwd != "") {
 
                 //send login request to server
-                axios.get('/login/auth', {
+                axios.post('/login/auth', {
                     params: {
-                        ID: 12345
+                        'user': user,
+                        'password': pwd
                     }
                 })
                     .then(function (response) {
