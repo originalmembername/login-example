@@ -35,8 +35,26 @@ export default {
                         'password': pwd
                     }
                 })
-                    .then(function (response) {
+                    .then( response => {
                         console.log("Response: " + response);
+                    })
+                    .catch( error => {
+                        let status = error.response.status
+                        console.log("Error status: " + status)
+                        if(status == 401){
+                            //Wrong password
+                            console.log("Wrong password")
+                            this.resetInput()
+                            return
+                        }
+                        if(status == 404){
+                            //user doesn't exist
+                            console.log("User doesn't exist")
+                            this.resetInput()
+                            return
+                        }
+                        //if other error status, this shouldn't happen
+                        throw error
                     })
 
 
@@ -67,6 +85,11 @@ export default {
             } else {
                 console.log("A username and password must be present");
             }
+        },
+        async resetInput() {
+            console.log ("Resetting login input fields")
+            this.input.username = ""
+            this.input.password = ""
         }
     }
 }

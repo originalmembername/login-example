@@ -1,17 +1,42 @@
 import { rest } from 'msw'
-//import authComp from './authcomp'
+import authComp from './authcomp'
 
 export const authHandlers = [
     rest.post('/login/auth', (req, res, ctx) => {
         var user = req.body.params.user
         var pwd = req.body.params.password
         console.log ("New login request, user: " + user + " password: " + pwd)
+
+         //check if user exists
+         if (authComp.userExists(user)){
+            //check if credentials are correct
+            if (authComp.checkLogin(user, pwd) == true) {
+                //respond with 200 + token
+                //       sessionStorage.setItem('is-authenticated', 'true') TODO
+                //isAuthenticated is set by Frontend, not here
+                let token = Math.random().toString(36).substr(2)
+                console.log("Login request accepted, new token: " + token)
+                return res(
+                    // Respond with a 200 status code & token
+                    ctx.status(200),
+                    ctx.cookie({
+                        'token': token
+                    })
+                )
+            }
+            //user exists, but pwd is wrong
+            console.log("Wrong password")
+            return res(
+                ctx.status(401),
+                ctx.text("Wrong password")
+            )
+        }
+        //user doesn't exist
+        console.log ("User doesn't exist")
         return res(
-            ctx.json({
-                firstName: 'John',
-                lastName: 'Maverick',
-            }),
-        )
+            ctx.status(404),
+            ctx.text("User doesn't exist")
+        )        
     }),
     rest.get('/login/auth2', (req, res, ctx) => {
         return res(
