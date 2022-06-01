@@ -19,7 +19,7 @@ export const authHandlers = [
                 return res(
                     // Respond with a 200 status code & token
                     ctx.status(200),
-                    ctx.cookie({
+                    ctx.json({
                         'token': token
                     })
                 )

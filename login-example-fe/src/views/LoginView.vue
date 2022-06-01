@@ -10,6 +10,7 @@
 <script>
 /* eslint-disable no-debugger */
 import axios from 'axios';
+import authComp from '@/components/Auth/authcomp';
 
 export default {
     name: 'LoginView',
@@ -35,19 +36,28 @@ export default {
                         'password': pwd
                     }
                 })
-                    .then( response => {
-                        console.log("Response: " + response);
+                    .then(response => {
+                        //login has been accepted
+                        let token = response.data.token
+                        console.log("Login accepted with token: " + token);
+                        //Set authenticated to "true" and store token
+                        authComp.isAuthenticated = true
+                        authComp.token = token                        
+                        //tell isAuthenticated to App component, so header can be adapted
+                        this.$emit("authenticated");  
+                        //forward to restricted member page                      
+                        this.$router.push("/member");
                     })
-                    .catch( error => {
+                    .catch(error => {
                         let status = error.response.status
                         console.log("Error status: " + status)
-                        if(status == 401){
+                        if (status == 401) {
                             //Wrong password
                             console.log("Wrong password")
                             this.resetInput()
                             return
                         }
-                        if(status == 404){
+                        if (status == 404) {
                             //user doesn't exist
                             console.log("User doesn't exist")
                             this.resetInput()
@@ -56,38 +66,12 @@ export default {
                         //if other error status, this shouldn't happen
                         throw error
                     })
-
-
-
-                /* axios.post('https://localhost:8080/login/auth', {
-                    user: this.username,
-                    password: this.password
-                })
-                    .then(function (response) {
-                        console.log("Response: " + response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    }); */
-
-                /*  //Check username & password
-                 if (this.input.username == MockServerComp.data().username && this.input.password == MockServerComp.data().password) {
-                     console.log("Login successful")
-                     //Set authenticated to "true"
-                     authComp.isAuthenticated = true
-                     console.log("authComp.isAuthenticated: " + authComp.isAuthenticated)
-                     //tell isAuthenticated to App component, so header can be adapted
-                     this.$emit("authenticated");
-                     this.$router.push("/member");
-                 } else {
-                     console.log("The username and / or password is incorrect");
-                 } */
             } else {
                 console.log("A username and password must be present");
             }
         },
         async resetInput() {
-            console.log ("Resetting login input fields")
+            console.log("Resetting login input fields")
             this.input.username = ""
             this.input.password = ""
         }

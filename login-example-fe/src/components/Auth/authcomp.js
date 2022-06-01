@@ -7,6 +7,7 @@ users.set ("user2", "password2")
 
 //set user auth status
 authComp.isAuthenticated = false
+authComp.token = null
 
 //check if user exisits
 authComp.userExists = function(user){

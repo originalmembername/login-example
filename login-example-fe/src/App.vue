@@ -1,6 +1,7 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Home</router-link>
+    <router-link v-if="authenticated" to="/member" >My Area</router-link>
     <router-link v-if="!authenticated" to="/login">Login</router-link>
     <router-link v-if="authenticated" to="/login" v-on:click="logout()" replace
       >Logout</router-link
@@ -18,13 +19,8 @@ export default {
     return {
       authenticated: authComp.isAuthenticated
     };
-  },  
-  
-/*   mounted() {
-    if (!this.authenticated) {  
-      this.$router.replace({ name: "login" });
-    }
-  }, */
+  },    
+
   methods: {
     updateAuthStatus() {
       this.authenticated = authComp.isAuthenticated;
@@ -32,6 +28,7 @@ export default {
     },
     logout() {
       authComp.isAuthenticated = false
+      authComp.token = null
       this.updateAuthStatus()
       console.log("Auth Status after logout: " + authComp.isAuthenticated)
     },
@@ -55,6 +52,7 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  margin: 5px;
 }
 
 nav a.router-link-exact-active {
