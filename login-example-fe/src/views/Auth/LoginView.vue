@@ -6,10 +6,16 @@
                 <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                     Username cannot be empty
                 </div>
+                <div v-if="errors.userDoesnotExist && !v$.input.username.$error" class="alert alert-warning" role="alert">
+                    User doesn't exist
+                </div>
             </div>
             <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" />
                 <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                     Password cannot be empty
+                </div>
+                <div v-if="errors.passwordIncorrect && !v$.input.password.$error" class="alert alert-warning" role="alert">
+                    Password incorrect
                 </div>
             </div>
 
@@ -36,6 +42,10 @@ export default {
             input: {
                 username: "",
                 password: ""
+            },
+            errors: {
+                userDoesnotExist: false,
+                passwordIncorrect: false
             }
         }
     },
@@ -51,6 +61,8 @@ export default {
     methods: {
         async login() {
             //validate form, cancel if there are errors
+            this.errors.userDoesnotExist = false
+            this.errors.passwordIncorrect = false
             this.v$.$validate()
             if (this.v$.$error) {
                 return
@@ -83,12 +95,14 @@ export default {
                     if (status == 401) {
                         //Wrong password
                         console.log("Wrong password")
+                        this.errors.passwordIncorrect = true
                         this.resetInput()
                         return
                     }
                     if (status == 404) {
                         //user doesn't exist
                         console.log("User doesn't exist")
+                        this.errors.userDoesnotExist = true
                         this.resetInput()
                         return
                     }
