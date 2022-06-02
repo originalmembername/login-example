@@ -1,9 +1,23 @@
 <template>
-    <div id="login">
-        <h1>Login</h1>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" />
-        <input type="password" name="password" v-model="input.password" placeholder="Password" />
-        <button type="button" v-on:click="login()">Login</button>
+    <div id="login" class="container">
+        <form>
+            <h1>Login</h1>
+            <div class="row"><input type="text" name="username" v-model="input.username" placeholder="Username" />
+                <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
+                    Username cannot be empty
+                </div>
+            </div>
+            <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" />
+                <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
+                    Password cannot be empty
+                </div>
+            </div>
+
+            <button type="button" v-on:click="login()">Login</button>
+        </form>
+
+
+
     </div>
 </template>
 
@@ -11,19 +25,36 @@
 /* eslint-disable no-debugger */
 import axios from 'axios';
 import authComp from '@/components/Auth/authcomp';
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 export default {
     name: 'LoginView',
     data() {
         return {
+            v$: useValidate(),
             input: {
                 username: "",
                 password: ""
             }
         }
     },
+    validations() {
+        return {
+            input: {
+                username: { required },
+                password: { required }
+            }
+        }
+    },
+
     methods: {
         async login() {
+            //validate form, cancel if there are errors
+            this.v$.$validate()
+            if (this.v$.$error) {
+                return
+            }
             //Get username and password
             let user = this.input.username
             let pwd = this.input.password
@@ -42,9 +73,9 @@ export default {
                         console.log("Login accepted with token: " + token);
                         //Set authenticated to "true" and store token
                         authComp.isAuthenticated = true
-                        authComp.token = token                        
+                        authComp.token = token
                         //tell isAuthenticated to App component, so header can be adapted
-                        this.$emit("authenticated");  
+                        this.$emit("authenticated");
                         //forward to restricted member page                      
                         this.$router.push("/member");
                     })
@@ -74,8 +105,9 @@ export default {
             console.log("Resetting login input fields")
             this.input.username = ""
             this.input.password = ""
+            this.v$.$reset()
         }
-    }
+    },
 }
 </script>
 
@@ -87,5 +119,9 @@ export default {
     margin: auto;
     margin-top: 200px;
     padding: 20px;
+}
+
+button {
+    margin: 5px;
 }
 </style>
