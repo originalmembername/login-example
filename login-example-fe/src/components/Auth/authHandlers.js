@@ -3,12 +3,13 @@ import authComp from './authcomp'
 
 export const authHandlers = [
     rest.post('/login/auth', (req, res, ctx) => {
+        //login request
         var user = req.body.params.user
         var pwd = req.body.params.password
-        console.log ("New login request, user: " + user + " password: " + pwd)
+        console.log("New login request, user: " + user + " password: " + pwd)
 
-         //check if user exists
-         if (authComp.userExists(user)){
+        //check if user exists
+        if (authComp.userExists(user)) {
             //check if credentials are correct
             if (authComp.checkLogin(user, pwd) == true) {
                 //respond with 200 + token
@@ -32,11 +33,38 @@ export const authHandlers = [
             )
         }
         //user doesn't exist
-        console.log ("User doesn't exist")
+        console.log("User doesn't exist")
         return res(
             ctx.status(404),
             ctx.text("User doesn't exist")
-        )        
+        )
+    }),
+    rest.post('/register/auth', (req, res, ctx) => {
+        //login request
+        var user = req.body.params.user
+        var pwd = req.body.params.password
+        console.log("New register request, user: " + user + " password: " + pwd)
+
+        //check if user already exists, reject if so
+        if (authComp.userExists(user)) {
+            //user already exists
+            console.log("User already exists")
+            return res(
+                ctx.status(403),
+                ctx.text("User already exists")
+            )
+        }
+        //create new user
+        authComp.addUser(user, pwd)
+        //return confirmation with username
+        console.log("Created new user: " + user)
+        return res(
+            // Respond with a 200 status code & created username
+            ctx.status(200),
+            ctx.json({
+                'user': user
+            })
+        )
     }),
     rest.get('/login/auth2', (req, res, ctx) => {
         return res(

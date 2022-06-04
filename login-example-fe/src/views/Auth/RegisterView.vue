@@ -24,6 +24,7 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { required, sameAs } from "@vuelidate/validators";
+import axios from 'axios';
 
 export default {
     data() {
@@ -52,7 +53,35 @@ export default {
             if (this.v$.$error) {                
                 return
             }
-            console.log("For validation successful for new user: " + this.username)
+            //send registration request to server
+            let user = this.input.username
+            let pwd = this.input.password
+            console.log("Trying register request for new user: " + user)
+            //send login request to server
+            axios.post('/register/auth', {
+                params: {
+                    'user': user,
+                    'password': pwd
+                }
+            })
+                .then(response => {
+                    //user has been successfully created
+                    console.log("Created user " + response.data.user)
+                    //show success screen; pass on user to be displayed there
+                    this.$router.push({name: 'registerSuccess', params: {user: user}})
+                    return
+                })
+                .catch(error => {
+                    let status = error.response.status
+                    console.log("Error status: " + status)
+                    if (status == 403) {
+                        //User already exists
+                        console.log("User already exists")
+                        return
+                    }
+                    //something else happened
+                    throw error
+                })
         }
     }
 }

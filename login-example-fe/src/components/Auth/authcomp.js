@@ -23,6 +23,15 @@ authComp.checkLogin = function(user, password){
     var correctPwd = users.get(user)
     console.log("Correct password: " + correctPwd)
     return (password == correctPwd)
+},
+
+//add new user; return false if it already exists
+authComp.addUser = function (user, password){
+    if(authComp.userExists(user)){
+        return false
+    }
+    users.set(user, password)
+    return true
 }
 
 

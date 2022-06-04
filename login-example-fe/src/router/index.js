@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import MemberAreView from '../views/MemberAreaView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue'
+import RegisterSuccessView from '@/views/Auth/RegisterSuccessView.vue'
 import authComp from '@/components/Auth/authcomp.js'
 
 const routes = [
@@ -26,6 +27,15 @@ const routes = [
     path: '/register',
     name: 'register',
     component: RegisterView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/register/success:user',
+    name: 'registerSuccess',
+    component: RegisterSuccessView,
+    props: true,
     meta: {
       requiresAuth: false
     }
