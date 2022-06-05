@@ -18,6 +18,9 @@
             </div>
         </div>
         <button type="button" v-on:click="register()">Register</button>
+        <div v-if="errors.userAlreadyExists" class="alert alert-danger" role="alert">
+                User {{errors.duplicateUser}} already exists
+            </div>
     </div>
 </template>
 
@@ -34,6 +37,10 @@ export default {
                 username: "",
                 password: "",
                 password2: ""
+            },
+            errors: {
+                userAlreadyExists: false,
+                duplicateUser: ""
             }
         }
     },
@@ -48,6 +55,8 @@ export default {
     },
     methods: {
         async register() {
+            this.errors.duplicateUser = ""
+            this.errors.userAlreadyExists = false
             //validate form, cancel if there are errors
             this.v$.$validate()
             if (this.v$.$error) {                
@@ -77,6 +86,10 @@ export default {
                     if (status == 403) {
                         //User already exists
                         console.log("User already exists")
+                        this.errors.duplicateUser = this.input.username
+                        this.errors.userAlreadyExists = true
+                        this.input.username = ""
+                        this.v$.$reset()
                         return
                     }
                     //something else happened
