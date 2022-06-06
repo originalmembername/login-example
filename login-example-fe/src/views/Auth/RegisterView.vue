@@ -75,7 +75,7 @@ export default {
             }).catch(error => {
                 let status = error.response.status
                 console.log("Error status: " + status)
-                if (status == authService.httpCodes.DUPLICATE_USER) {
+                if (status == authService.HTTPCodes.DUPLICATE_USER) {
                     //User already exists
                     console.log("User already exists")
                     this.errors.duplicateUser = this.input.username

@@ -1,5 +1,6 @@
 <template>
     <div id="login" class="container">
+        <div id="logoutMessage" v-if="displayLogoutMessage">You have been successfully logged out</div>
         <form>
             <h1>Login</h1>
             <div class="row"><input type="text" name="username" v-model="input.username" placeholder="Username" />
@@ -39,6 +40,7 @@ export default {
     data() {
         return {
             v$: useValidate(),
+            displayLogoutMessage: false,
             input: {
                 username: "",
                 password: ""
@@ -49,6 +51,12 @@ export default {
             }
         }
     },
+/*     props: {
+        justLoggedOut: {
+            type: Boolean,
+            required: false
+        }
+    }, */
     validations() {
         return {
             input: {
@@ -74,7 +82,7 @@ export default {
             authService.login(user, pwd).then(() => {
                 //login was successful
                 //tell App component to update header
-                console.log ("Auth Status: " + authService.isAuthenticated)
+                console.log("Auth Status: " + authService.isAuthenticated)
                 this.$emit("authenticated")
                 //forward to restricted member page                      
                 this.$router.push("/member")
@@ -108,6 +116,14 @@ export default {
             this.v$.$reset()
         }
     },
+    created() {
+        //check if we've just been logged out
+        console.log("Have we just been logged out: " + this.$route.params.justLoggedOut)
+        if(this.$route.params.justLoggedOut){
+            this.displayLogoutMessage = true
+            setTimeout(() => this.displayLogoutMessage = false, 3000)
+        }        
+    }
 }
 </script>
 
