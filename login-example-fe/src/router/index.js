@@ -4,7 +4,7 @@ import MemberAreView from '../views/MemberAreaView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue'
 import RegisterSuccessView from '@/views/Auth/RegisterSuccessView.vue'
-import authComp from '@/components/Auth/authcomp.js'
+import authService from '@/services/authService'
 
 const routes = [
   {
@@ -55,15 +55,13 @@ const router = createRouter({
   routes
 })
 
-//const authComp = this.$root.$authComp
-
 /**
  * Check for each routing if this component is restricted
  */
 router.beforeEach((to, _from, next) => {
-  console.log("Logged in: " + authComp.isAuthenticated)
+  console.log("Logged in: " + authService.isAuthenticated)
 
-  if (to.meta.requiresAuth && authComp.isAuthenticated == false) {
+  if (to.meta.requiresAuth && authService.isAuthenticated == false) {
     console.log("Not authenticated, access denied")
     router.push('/login')
   }

@@ -1,22 +1,18 @@
-const authComp = new Object()
+const user_db = new Object()
 
 //define Map for users & passwords
 const users = new Map()
 users.set("user", "password")
 users.set ("user2", "password2")
 
-//set user auth status
-authComp.isAuthenticated = false
-authComp.token = null
-
 //check if user exisits
-authComp.userExists = function(user){
+user_db.userExists = function(user){
     console.log("User " + user + " exists: " + users.has(user))
     return users.has(user)
 }
 
 //function to check login
-authComp.checkLogin = function(user, password){
+user_db.checkLogin = function(user, password){
     if (!users.has(user)){
         return false
     }
@@ -26,8 +22,8 @@ authComp.checkLogin = function(user, password){
 },
 
 //add new user; return false if it already exists
-authComp.addUser = function (user, password){
-    if(authComp.userExists(user)){
+user_db.addUser = function (user, password){
+    if(user_db.userExists(user)){
         return false
     }
     users.set(user, password)
@@ -35,5 +31,4 @@ authComp.addUser = function (user, password){
 }
 
 
-
-export default authComp
+export default user_db

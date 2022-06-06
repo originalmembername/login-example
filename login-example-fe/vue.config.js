@@ -11,7 +11,8 @@ module.exports = defineConfig({
         "zlib": require.resolve("browserify-zlib"),
         "stream": require.resolve("stream-browserify"),
         "assert": require.resolve("assert/"),
-        "util": require.resolve("util/")
+        "util": require.resolve("util/"),
+        "crypto": require.resolve("crypto-browserify")
       }
     },
     plugins: [

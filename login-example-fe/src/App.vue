@@ -12,26 +12,26 @@
 </template>
 
 <script>
-import authComp from './components/Auth/authcomp';
+import authService from './services/authService';
 
 export default {
   name: "App",
   data() {
     return {
-      authenticated: authComp.isAuthenticated
+      authenticated: authService.isAuthenticated
     };
   },    
 
   methods: {
     updateAuthStatus() {
-      this.authenticated = authComp.isAuthenticated;
-      console.log("Set Auth Status to: " + authComp.isAuthenticated)
+      this.authenticated = authService.isAuthenticated;
+      console.log("Set Auth Status to: " + authService.isAuthenticated)
     },
     logout() {
-      authComp.isAuthenticated = false
-      authComp.token = null
+      authService.isAuthenticated = false
+      authService.token = null
       this.updateAuthStatus()
-      console.log("Auth Status after logout: " + authComp.isAuthenticated)
+      console.log("Auth Status after logout: " + authService.isAuthenticated)
     },
   },
 };

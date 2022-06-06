@@ -6,7 +6,8 @@
                 <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                     Username cannot be empty
                 </div>
-                <div v-if="errors.userDoesnotExist && !v$.input.username.$error" class="alert alert-warning" role="alert">
+                <div v-if="errors.userDoesnotExist && !v$.input.username.$error" class="alert alert-warning"
+                    role="alert">
                     User doesn't exist
                 </div>
             </div>
@@ -14,7 +15,8 @@
                 <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                     Password cannot be empty
                 </div>
-                <div v-if="errors.passwordIncorrect && !v$.input.password.$error" class="alert alert-warning" role="alert">
+                <div v-if="errors.passwordIncorrect && !v$.input.password.$error" class="alert alert-warning"
+                    role="alert">
                     Password incorrect
                 </div>
             </div>
@@ -28,11 +30,9 @@
 </template>
 
 <script>
-/* eslint-disable no-debugger */
-import axios from 'axios';
-import authComp from '@/components/Auth/authcomp';
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import authService from '@/services/authService.js'
 
 export default {
     name: 'LoginView',
@@ -59,7 +59,7 @@ export default {
     },
 
     methods: {
-        async login() {
+        login() {
             //validate form, cancel if there are errors
             this.errors.userDoesnotExist = false
             this.errors.passwordIncorrect = false
@@ -70,45 +70,36 @@ export default {
             //Get username and password
             let user = this.input.username
             let pwd = this.input.password
-            //send login request to server
-            axios.post('/login/auth', {
-                params: {
-                    'user': user,
-                    'password': pwd
+            //try to login
+            authService.login(user, pwd).then(() => {
+                //login was successful
+                //tell App component to update header
+                console.log ("Auth Status: " + authService.isAuthenticated)
+                this.$emit("authenticated")
+                //forward to restricted member page                      
+                this.$router.push("/member")
+                return
+            }
+            ).catch(error => {
+                let status = error.response.status
+                console.log("Error status: " + status)
+                if (status == authService.HTTPCodes.WRONG_PASSWORD) {
+                    //Wrong password
+                    console.log("Wrong password")
+                    this.errors.passwordIncorrect = true
+                    this.resetInput()
+                    return
                 }
+                if (status == authService.HTTPCodes.USER_DOESNT_EXIST) {
+                    //user doesn't exist
+                    console.log("User doesn't exist")
+                    this.errors.userDoesnotExist = true
+                    this.resetInput()
+                    return
+                }
+                //if other error status, this shouldn't happen
+                throw error
             })
-                .then(response => {
-                    //login has been accepted
-                    let token = response.data.token
-                    console.log("Login accepted with token: " + token);
-                    //Set authenticated to "true" and store token
-                    authComp.isAuthenticated = true
-                    authComp.token = token
-                    //tell isAuthenticated to App component, so header can be adapted
-                    this.$emit("authenticated");
-                    //forward to restricted member page                      
-                    this.$router.push("/member");
-                })
-                .catch(error => {
-                    let status = error.response.status
-                    console.log("Error status: " + status)
-                    if (status == 401) {
-                        //Wrong password
-                        console.log("Wrong password")
-                        this.errors.passwordIncorrect = true
-                        this.resetInput()
-                        return
-                    }
-                    if (status == 404) {
-                        //user doesn't exist
-                        console.log("User doesn't exist")
-                        this.errors.userDoesnotExist = true
-                        this.resetInput()
-                        return
-                    }
-                    //if other error status, this shouldn't happen
-                    throw error
-                })
         },
         async resetInput() {
             console.log("Resetting login input fields")
