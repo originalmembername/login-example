@@ -19,15 +19,15 @@
         </div>
         <button type="button" v-on:click="register()">Register</button>
         <div v-if="errors.userAlreadyExists" class="alert alert-danger" role="alert">
-                User {{errors.duplicateUser}} already exists
-            </div>
+            User {{ errors.duplicateUser }} already exists
+        </div>
     </div>
 </template>
 
 <script>
 import useValidate from "@vuelidate/core";
 import { required, sameAs } from "@vuelidate/validators";
-import axios from 'axios';
+import authService from '@/services/authService';
 
 export default {
     data() {
@@ -54,47 +54,39 @@ export default {
         }
     },
     methods: {
-        async register() {
+        register() {
             this.errors.duplicateUser = ""
             this.errors.userAlreadyExists = false
             //validate form, cancel if there are errors
             this.v$.$validate()
-            if (this.v$.$error) {                
+            if (this.v$.$error) {
                 return
             }
             //send registration request to server
             let user = this.input.username
             let pwd = this.input.password
             console.log("Trying register request for new user: " + user)
-            //send login request to server
-            axios.post('/register/auth', {
-                params: {
-                    'user': user,
-                    'password': pwd
-                }
-            })
-                .then(response => {
-                    //user has been successfully created
-                    console.log("Created user " + response.data.user)
-                    //show success screen; pass on user to be displayed there
-                    this.$router.push({name: 'registerSuccess', params: {user: user}})
+            //try to register new user
+            authService.register(user, pwd).then(() => {
+                //user has been successfully created
+                //show success screen; pass on username to be displayed there
+                this.$router.push({ name: 'registerSuccess', params: { user: user } })
+                return
+            }).catch(error => {
+                let status = error.response.status
+                console.log("Error status: " + status)
+                if (status == authService.httpCodes.DUPLICATE_USER) {
+                    //User already exists
+                    console.log("User already exists")
+                    this.errors.duplicateUser = this.input.username
+                    this.errors.userAlreadyExists = true
+                    this.input.username = ""
+                    this.v$.$reset()
                     return
-                })
-                .catch(error => {
-                    let status = error.response.status
-                    console.log("Error status: " + status)
-                    if (status == 403) {
-                        //User already exists
-                        console.log("User already exists")
-                        this.errors.duplicateUser = this.input.username
-                        this.errors.userAlreadyExists = true
-                        this.input.username = ""
-                        this.v$.$reset()
-                        return
-                    }
-                    //something else happened
-                    throw error
-                })
+                }
+                //something else happened
+                throw error
+            })
         }
     }
 }

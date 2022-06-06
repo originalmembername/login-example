@@ -6,6 +6,7 @@ const authService = new Object({
     HTTPCodes: {
         OK: 200,
         USER_DOESNT_EXIST: 404,
+        DUPLICATE_USER: 403,
         WRONG_PASSWORD: 401
     },
 
@@ -35,6 +36,22 @@ const authService = new Object({
         }
         )
 
+    },
+    register: async function (user, password) {
+        return new Promise((resolve, reject) => {
+            axios.post('/register/auth', {
+                params: {
+                    'user': user,
+                    'password': password
+                }
+            }).then(response => {
+                //registration was successful
+                resolve(response)
+            }).catch(error => {
+                //registration was unsuccessful, pass error onto view
+                reject(error)
+            })
+        })
     }
 })
 
