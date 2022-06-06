@@ -32,7 +32,7 @@ const routes = [
     }
   },
   {
-    path: '/register/success:user',
+    path: '/register/success/:user',
     name: 'registerSuccess',
     component: RegisterSuccessView,
     props: true,
@@ -62,15 +62,13 @@ router.beforeEach((to, _from, next) => {
   console.log("Logged in: " + authService.isAuthenticated)
 
   if (to.meta.requiresAuth && authService.isAuthenticated == false) {
+    //we're not allowed to access this page
     console.log("Not authenticated, access denied")
     router.push('/login')
-  }
-  else {
-    // eslint-disable-next-line no-debugger
-    //debugger
-    console.log("This page doesn't require auth, or we're logged in")
-    next()
+    return
   }  
+  //go to the next page
+  next()
 }
 )
 

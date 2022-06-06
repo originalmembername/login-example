@@ -28,8 +28,7 @@ export default {
       console.log("Set Auth Status to: " + authService.isAuthenticated)
     },
     logout() {
-      authService.isAuthenticated = false
-      authService.token = null
+      authService.logout()      
       this.updateAuthStatus()
       console.log("Auth Status after logout: " + authService.isAuthenticated)
       this.$router.push({name: 'login', params: {justLoggedOut: true}})

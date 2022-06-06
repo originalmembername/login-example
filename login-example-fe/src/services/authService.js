@@ -52,6 +52,12 @@ const authService = new Object({
                 reject(error)
             })
         })
+    },
+    logout: async function () {
+        //remove login token for this user
+        this.isAuthenticated = false
+        this.token = null
+        //send logout request to server TODO
     }
 })
 

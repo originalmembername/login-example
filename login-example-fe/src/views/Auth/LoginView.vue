@@ -118,7 +118,6 @@ export default {
     },
     created() {
         //check if we've just been logged out
-        console.log("Have we just been logged out: " + this.$route.params.justLoggedOut)
         if(this.$route.params.justLoggedOut){
             this.displayLogoutMessage = true
             setTimeout(() => this.displayLogoutMessage = false, 3000)
