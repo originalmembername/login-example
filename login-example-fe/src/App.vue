@@ -18,19 +18,19 @@ export default {
   name: "App",
   data() {
     return {
-      authenticated: authService.isAuthenticated
+      authenticated: authService.isAuthenticated()
     };
   },    
 
   methods: {
     updateAuthStatus() {
-      this.authenticated = authService.isAuthenticated;
-      console.log("Set Auth Status to: " + authService.isAuthenticated)
+      this.authenticated = authService.isAuthenticated();
+      console.log("Set Auth Status to: " + authService.isAuthenticated())
     },
     logout() {
       authService.logout()      
       this.updateAuthStatus()
-      console.log("Auth Status after logout: " + authService.isAuthenticated)
+      console.log("Auth Status after logout: " + authService.isAuthenticated())
       this.$router.push({name: 'login', params: {justLoggedOut: true}})
     },
   },

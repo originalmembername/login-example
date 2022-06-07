@@ -1,15 +1,18 @@
 import axios from "axios";
 
 const authService = new Object({
-    isAuthenticated: false,
-    token: null,
     HTTPCodes: {
         OK: 200,
         USER_DOESNT_EXIST: 404,
         DUPLICATE_USER: 403,
         WRONG_PASSWORD: 401
     },
-
+    isAuthenticated: function(){
+        return localStorage.getItem('token') != null
+    },
+    getToken: function() {
+        return localStorage.getItem('token')
+    },
     login: async function (user, password) {
         return new Promise((resolve, reject) => {
             axios.post('/login/auth', {
@@ -23,8 +26,9 @@ const authService = new Object({
                     let token = response.data.token
                     console.log("Login accepted with token: " + token);
                     //Set authenticated to "true" and store token
-                    this.isAuthenticated = true
-                    this.token = token
+                    setAuthToken(user, token)
+//                    this.isAuthenticated = true
+//                    this.token = token
                     resolve(response)
                 })
                 .catch(error => {
@@ -55,10 +59,19 @@ const authService = new Object({
     },
     logout: async function () {
         //remove login token for this user
-        this.isAuthenticated = false
-        this.token = null
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
         //send logout request to server TODO
     }
 })
+
+function setAuthToken(user, token) {    
+    //set token for this user; or token for undefined user
+    if(user){
+        localStorage.setItem('user', user)
+    }    
+    localStorage.setItem('token', token)
+    console.log("Stored new token in local storage: " + localStorage.getItem('token'))
+}
 
 export default authService

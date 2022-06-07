@@ -59,9 +59,9 @@ const router = createRouter({
  * Check for each routing if this component is restricted
  */
 router.beforeEach((to, _from, next) => {
-  console.log("Logged in: " + authService.isAuthenticated)
+  console.log("Logged in: " + authService.isAuthenticated())
 
-  if (to.meta.requiresAuth && authService.isAuthenticated == false) {
+  if (to.meta.requiresAuth && authService.isAuthenticated() == false) {
     //we're not allowed to access this page
     console.log("Not authenticated, access denied")
     router.push('/login')
