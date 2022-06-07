@@ -41,6 +41,7 @@ export const authHandlers = [
         //login request
         var user = req.body.params.user
         var pwd = req.body.params.password
+        var city = req.body.params.city
         console.log("New register request, user: " + user + " password: " + pwd)
 
         //check if user already exists, reject if so
@@ -53,7 +54,7 @@ export const authHandlers = [
             )
         }
         //create new user
-        user_db.addUser(user, pwd)
+        user_db.addUser(user, pwd, city)
         //return confirmation with username
         console.log("Created new user: " + user)
         return res(

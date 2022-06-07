@@ -5,6 +5,7 @@ const users = new Map()
 users.set("user", "password")
 users.set("user2", "password2")
 
+const cities = new Map()
 const userTokens = new Map()
 
 //check if this token is registered, i.e. user is logged in
@@ -51,11 +52,12 @@ user_db.checkLogin = function (user, password) {
 },
 
     //add new user; return false if it already exists
-    user_db.addUser = function (user, password) {
+    user_db.addUser = function (user, password, city) {
         if (user_db.userExists(user)) {
             return false
         }
         users.set(user, password)
+        cities.set(user, city)
         return true
     }
 

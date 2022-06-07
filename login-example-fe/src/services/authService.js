@@ -41,12 +41,13 @@ const authService = new Object({
         )
 
     },
-    register: async function (user, password) {
+    register: async function (user, password, city) {
         return new Promise((resolve, reject) => {
             axios.post('/register/auth', {
                 params: {
                     'user': user,
-                    'password': password
+                    'password': password,
+                    'city': city
                 }
             }).then(response => {
                 //registration was successful

@@ -6,6 +6,11 @@
                 Username cannot be empty
             </div>
         </div>
+        <div class="row"><input type="text" name="city" v-model="input.city" placeholder="City" />
+            <div v-if="v$.input.city.$error" class="alert alert-warning" role="alert">
+                Please state your city
+            </div>
+        </div>
         <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" />
             <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                 Password cannot be empty
@@ -35,6 +40,7 @@ export default {
             v$: useValidate(),
             input: {
                 username: "",
+                city: "",
                 password: "",
                 password2: ""
             },
@@ -48,6 +54,7 @@ export default {
         return {
             input: {
                 username: { required },
+                city: {required},
                 password: { required },
                 password2: { required, sameAsPassword: sameAs(this.input.password) }
             }
@@ -63,14 +70,10 @@ export default {
                 return
             }
             //send registration request to server
-            let user = this.input.username
-            let pwd = this.input.password
-            console.log("Trying register request for new user: " + user)
-            //try to register new user
-            authService.register(user, pwd).then(() => {
+            authService.register(this.input.username, this.input.password, this.input.city).then(() => {
                 //user has been successfully created
                 //show success screen; pass on username to be displayed there
-                this.$router.push({ name: 'registerSuccess', params: { user: user } })
+                this.$router.push({ name: 'registerSuccess', params: { user: this.input.username } })
                 return
             }).catch(error => {
                 let status = error.response.status
