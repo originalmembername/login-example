@@ -12,9 +12,9 @@ export const authHandlers = [
         if (user_db.userExists(user)) {
             //check if credentials are correct
             if (user_db.checkLogin(user, pwd) == true) {
-                //respond with 200 + token
+                //create token and store it in db
                 let token = Math.random().toString(36).substr(2)
-                console.log("Login request accepted, new token: " + token)
+                user_db.registerToken(token, user)
                 return res(
                     // Respond with a 200 status code & token
                     ctx.status(200),
@@ -64,5 +64,30 @@ export const authHandlers = [
                 'user': user
             })
         )
+    }),
+    rest.post('/logout', (req, res, ctx) => {
+        //remove token
+        let token = req.body.params.token
+        if(!token){
+            return res(
+                //request contains no token
+                ctx.status(400),
+                ctx.text('Missing token')
+            ) 
+        }
+        let removed = user_db.removeToken(token)
+        if(!removed) {
+            return res(
+                //this tken didn't exist
+                ctx.status(404),
+                ctx.text('This token doesn´t exist on server: ' + token)
+            ) 
+        }
+        //token successfully removed
+        console.log("Token removed: " + token)
+        return res(
+            ctx.status(200),
+            ctx.text('Token successfully removed')            
+        ) 
     })
 ]

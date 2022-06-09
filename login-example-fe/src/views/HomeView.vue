@@ -1,18 +1,14 @@
 <template>
   <div class="home">
-    <img alt="Plagwith painting" src="../assets/plagwitz2.jpg">
-    <HomeComp msg="Welcome to Peter's picture shop"/>
+    <h1>Welcme to Peter's Blog</h1>
+    <img alt="Plagwitz painting" src="../assets/plagwitz2.jpg">
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HomeComp from '@/components/HomeComp.vue'
 
 export default {
-  name: 'HomeView',
-  components: {
-    HomeComp
-  }
+  name: 'HomeView'
 }
 </script>

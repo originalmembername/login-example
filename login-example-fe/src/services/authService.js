@@ -7,10 +7,10 @@ const authService = new Object({
         DUPLICATE_USER: 403,
         WRONG_PASSWORD: 401
     },
-    isAuthenticated: function(){
+    isAuthenticated: function () {
         return localStorage.getItem('token') != null
     },
-    getToken: function() {
+    getToken: function () {
         return localStorage.getItem('token')
     },
     login: async function (user, password) {
@@ -27,8 +27,8 @@ const authService = new Object({
                     console.log("Login accepted with token: " + token);
                     //Set authenticated to "true" and store token
                     setAuthToken(user, token)
-//                    this.isAuthenticated = true
-//                    this.token = token
+                    //                    this.isAuthenticated = true
+                    //                    this.token = token
                     resolve(response)
                 })
                 .catch(error => {
@@ -59,18 +59,40 @@ const authService = new Object({
         })
     },
     logout: async function () {
-        //remove login token for this user
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        //send logout request to server TODO
+        return new Promise((resolve, reject) => {
+            let token = localStorage.getItem('token')
+            if (token == null) {
+                reject(new Error({ message: "Token " + token + " doesn't exist in local storage" }))
+            }
+            //remove local token for this user
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            console.log("Token " + token + " was removed locally")
+
+            //send logout request to server to remove token there as well
+            axios.post('/logout', {
+                params: {
+                    'token': token
+                }
+            }).then(response=> {
+                //logout was successful
+                console.log("Server confirmed removal of token: " + token)
+                resolve(response)
+            }).catch(error=> {
+                //Token on Server couldn't be removed, or wasn't there, but we're logged out anyway
+                reject(error)
+            })
+        })
+
+
     }
 })
 
-function setAuthToken(user, token) {    
+function setAuthToken(user, token) {
     //set token for this user; or token for undefined user
-    if(user){
+    if (user) {
         localStorage.setItem('user', user)
-    }    
+    }
     localStorage.setItem('token', token)
     console.log("Stored new token in local storage: " + localStorage.getItem('token'))
 }

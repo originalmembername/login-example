@@ -24,15 +24,12 @@ user_db.removeToken = function (token) {
 
 //register token for user
 user_db.registerToken = function (token, user) {
-    var today = new Date();
-    var date = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear()
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-    var lastLogin = date + ' ' + time
-    console.log("Registering token " + token + " for user " + user + " at " + lastLogin)
-    userTokens.set(token, new Object({
-        user: user,
-        lastLogin: lastLogin
-    }))
+    if(userTokens.has(token)){
+        return false
+    }
+    userTokens.set(token, user)
+    console.log("Registered token " + token + " for user " + user)
+    return true
 }
 
 //check if user exisits
