@@ -5,6 +5,8 @@ import LoginView from '@/views/Auth/LoginView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue'
 import RegisterSuccessView from '@/views/Auth/RegisterSuccessView.vue'
 import authService from '@/services/authService'
+import FigmaLogin1 from '@/TestComponents/FigmaLogin1.vue'
+
 
 const routes = [
   {
@@ -19,6 +21,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: FigmaLogin1,
     meta: {
       requiresAuth: false
     }

@@ -2,7 +2,7 @@
     <div id="member-area">
         <h1>Secure Area</h1>
         <p>
-            This is a secure area
+            This is a secure area, where some secret information will be displayed
         </p>
     </div>
 </template>
