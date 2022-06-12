@@ -7,6 +7,7 @@
                 <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                     Username cannot be empty
                 </div>
+                <!-- Only if Server provides detailed info about rejection -->
                 <div v-if="errors.userDoesnotExist && !v$.input.username.$error" class="alert alert-warning"
                     role="alert">
                     User doesn't exist
@@ -16,9 +17,15 @@
                 <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                     Password cannot be empty
                 </div>
+                <!-- Only if Server provides detailed info about rejection -->
                 <div v-if="errors.passwordIncorrect && !v$.input.password.$error" class="alert alert-warning"
                     role="alert">
                     Password incorrect
+                </div>
+                <!-- Only if Server provides general rejection of login request, w/o detail -->
+                <div v-if="errors.loginIncorrect && !v$.input.password.$error" class="alert alert-warning"
+                    role="alert">
+                    Username or Password incorrect
                 </div>
             </div>
 
@@ -47,7 +54,8 @@ export default {
             },
             errors: {
                 userDoesnotExist: false,
-                passwordIncorrect: false
+                passwordIncorrect: false,
+                loginIncorrect: false
             }
         }
     },
@@ -71,6 +79,7 @@ export default {
             //validate form, cancel if there are errors
             this.errors.userDoesnotExist = false
             this.errors.passwordIncorrect = false
+            this.errors.loginIncorrect = false
             this.v$.$validate()
             if (this.v$.$error) {
                 return
@@ -102,6 +111,13 @@ export default {
                     //user doesn't exist
                     console.log("User doesn't exist")
                     this.errors.userDoesnotExist = true
+                    this.resetInput()
+                    return
+                }
+                if (status == authService.HTTPCodes.BAD_REQUEST) {
+                    //username or password wrong, no detail
+                    console.log("User or password wrong")
+                    this.errors.loginIncorrect = true
                     this.resetInput()
                     return
                 }

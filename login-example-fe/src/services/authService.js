@@ -5,7 +5,8 @@ const authService = new Object({
         OK: 200,
         USER_DOESNT_EXIST: 404,
         DUPLICATE_USER: 403,
-        WRONG_PASSWORD: 401
+        WRONG_PASSWORD: 401,
+        BAD_REQUEST: 400
     },
     isAuthenticated: function () {
         return localStorage.getItem('token') != null
