@@ -15,11 +15,10 @@ const authService = new Object({
     },
     login: async function (user, password) {
         return new Promise((resolve, reject) => {
-            axios.post('/login/auth', {
-                params: {
-                    'user': user,
-                    'password': password
-                }
+            axios.post("http://127.0.0.1:8000/auth/login/", 
+            {
+                username: user,
+                password: password
             })
                 .then(response => {
                     //login has been accepted
