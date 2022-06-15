@@ -16,11 +16,11 @@ const authService = new Object({
     },
     login: async function (user, password) {
         return new Promise((resolve, reject) => {
-            axios.post("http://127.0.0.1:8000/auth/login/", 
-            {
-                username: user,
-                password: password
-            })
+            axios.post("http://127.0.0.1:8000/auth/login/",
+                {
+                    username: user,
+                    password: password
+                })
                 .then(response => {
                     //login has been accepted
                     let token = response.data.token
@@ -74,17 +74,31 @@ const authService = new Object({
                 params: {
                     'token': token
                 }
-            }).then(response=> {
+            }).then(response => {
                 //logout was successful
                 console.log("Server confirmed removal of token: " + token)
                 resolve(response)
-            }).catch(error=> {
+            }).catch(error => {
                 //Token on Server couldn't be removed, or wasn't there, but we're logged out anyway
                 reject(error)
             })
         })
-
-
+    },
+    getUserInfo: async function (token) {
+        return new Promise((resolve, reject) => {
+            let json = require('../../networkconfig.json')
+            let url = json.BACKEND_URL + "auth/user/"
+            console.log("Sending token auth request to " + url)
+            axios.get(url, {
+                params: {
+                    'Token': token
+                }
+            }).then(response=> {
+                resolve(response)
+            }).catch(error=>{
+                reject(error)
+            })
+        })
     }
 })
 
