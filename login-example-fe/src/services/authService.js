@@ -87,13 +87,11 @@ const authService = new Object({
     getUserInfo: async function (token) {
         return new Promise((resolve, reject) => {
             let json = require('../../networkconfig.json')
-            let url = json.BACKEND_URL + "auth/user/"
+            let url = json.BACKEND_URL + "user/"
             console.log("Sending token auth request to " + url)
-            axios.get(url, {
-                params: {
-                    'Token': token
-                }
-            }).then(response=> {
+            console.log("Local Token: " + token);
+            axios.defaults.headers.common['Authorization'] = `Token ${token}`
+            axios.get(url, {}).then(response=> {
                 resolve(response)
             }).catch(error=>{
                 reject(error)

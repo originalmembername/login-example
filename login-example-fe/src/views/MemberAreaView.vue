@@ -1,10 +1,15 @@
 <template>
     <div id="member-area">
-        <h1>Secure Area</h1>
+        <h1>My area</h1>
         <p>
-            Welcome user {{userInfo.username}}
+            Username: {{userInfo.username}}
         </p>
-        <p v-if="userInfo.city">from {{userInfo.city}}</p>
+        <p>
+            Email: {{userInfo.email}}
+        </p>
+        <p>
+            City: {{userInfo.city}}
+        </p>        
     </div>
 </template>
 
@@ -16,6 +21,7 @@ import authService from '@/services/authService';
             return {
                 userInfo: {
                     username: "",
+                    email:"",
                     city: ""
                 }
             };
@@ -31,13 +37,10 @@ import authService from '@/services/authService';
             }
             authService.getUserInfo(token).then(response=>{
                 //request has been accepted
-                console.log(response)
-                let username = response.data.username
-                let city = response.data.city
-                this.userInfo.username = username
-                if(city){
-                    this.userInfo.city = city
-                }
+                console.log("Rersponse from User Backend: " + response.data)
+                this.userInfo.username = response.data.username
+                this.userInfo.email = response.data.email
+                this.userInfo.city = response.data.city                
             }).catch(error=>{
                 //request has been rejected, trigger logout
                 console.log(error)

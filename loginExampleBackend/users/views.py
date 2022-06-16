@@ -12,6 +12,11 @@ class UserView(APIView):
         user = request.user
         #serialize user data (is there any less awkward way?)
         #[-1] means last element
-        user_data = serializers.serialize('json', [user,], fields=('username','email','city'))[1:-1]
+#       user_data = serializers.serialize('json', [user,], fields=('username','email','city'))[1:-1]
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'city': user.city
+        }
         return JsonResponse(user_data, safe=False)
         
