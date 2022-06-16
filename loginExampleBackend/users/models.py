@@ -2,13 +2,14 @@ from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, UserManager
 
-
+#user model
 class User(AbstractUser):
     city = models.CharField(max_length=50, null=True)
 
     def _str_(self):
         return self.username + " from " + self.city
 
+#define methods for users like create
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, city=None):
       
