@@ -1,12 +1,10 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link>
-    <router-link v-if="authenticated" to="/member" >My Area</router-link>
+    <router-link v-if="authenticated" to="/member">My Area</router-link>
     <router-link v-if="!authenticated" to="/login">Login</router-link>
     <router-link v-if="!authenticated" to="/register">Register</router-link>
-    <router-link v-if="authenticated" to="#" v-on:click="logout()" replace
-      >Logout</router-link
-    >
+    <router-link v-if="authenticated" to="#" v-on:click="logout()" replace>Logout</router-link>
   </nav>
   <router-view @authenticated="updateAuthStatus" />
 </template>
@@ -20,7 +18,7 @@ export default {
     return {
       authenticated: authService.isAuthenticated()
     };
-  },    
+  },
 
   methods: {
     updateAuthStatus() {
@@ -28,10 +26,14 @@ export default {
       console.log("Set Auth Status to: " + authService.isAuthenticated())
     },
     logout() {
-      authService.logout()      
-      this.updateAuthStatus()
-      console.log("Auth Status after logout: " + authService.isAuthenticated())
-      this.$router.push({name: 'login', params: {justLoggedOut: true}})
+      authService.logout().catch(error => {
+        console.log("Something went wrong in the logout process: " + error)
+      }).finally(() => {
+        //no matter is logout on server was successful or not, we'll log out locally
+        this.authenticated = false
+        console.log("Auth Status after logout: " + authService.isAuthenticated())
+        this.$router.push({ name: 'login', params: { justLoggedOut: true } })
+      })
     },
   },
 };

@@ -78,7 +78,7 @@ const authService = new Object({
                 //remove local token in each case
                 localStorage.removeItem('token')
                 axios.defaults.headers.common['Authorization'] = null
-                console.log("Token " + token + " was removed locally")
+                console.log("Local token should've been removed, new Auth Status "+ this.isAuthenticated())
             })
         })
     },
