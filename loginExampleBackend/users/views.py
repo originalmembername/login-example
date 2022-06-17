@@ -19,4 +19,4 @@ class UserView(APIView):
             'city': user.city
         }
         return JsonResponse(user_data, safe=False)
-        
+    

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+const BACKEND_URL = require('../../networkconfig.json').BACKEND_URL
 const authService = new Object({
     HTTPCodes: {
         OK: 200,
@@ -64,36 +65,35 @@ const authService = new Object({
             if (token == null) {
                 reject(new Error({ message: "Token " + token + " doesn't exist in local storage" }))
             }
-            //remove local token for this user
-            localStorage.removeItem('token')
-            localStorage.removeItem('user')
-            console.log("Token " + token + " was removed locally")
-
-            //send logout request to server to remove token there as well
-            axios.post('/logout', {
-                params: {
-                    'token': token
-                }
-            }).then(response => {
+            //send logout request to server to remove token there
+            let url = BACKEND_URL + "auth/logout/"
+            axios.post(url, {}).then(response => {
                 //logout was successful
                 console.log("Server confirmed removal of token: " + token)
+                //remove local token for this user
+                localStorage.removeItem('token')
+                axios.defaults.headers.common['Authorization'] = null
+                console.log("Token " + token + " was removed locally")
                 resolve(response)
             }).catch(error => {
                 //Token on Server couldn't be removed, or wasn't there, but we're logged out anyway
+                //remove local token for this user anyway
+                localStorage.removeItem('token')
+                axios.defaults.headers.common['Authorization'] = null
+                console.log("Token " + token + " was removed locally")
                 reject(error)
             })
         })
     },
     getUserInfo: async function (token) {
         return new Promise((resolve, reject) => {
-            let json = require('../../networkconfig.json')
-            let url = json.BACKEND_URL + "user/"
+            let url = BACKEND_URL + "user/"
             console.log("Sending token auth request to " + url)
             console.log("Local Token: " + token);
             axios.defaults.headers.common['Authorization'] = `Token ${token}`
-            axios.get(url, {}).then(response=> {
+            axios.get(url, {}).then(response => {
                 resolve(response)
-            }).catch(error=>{
+            }).catch(error => {
                 reject(error)
             })
         })
