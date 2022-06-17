@@ -63,25 +63,22 @@ const authService = new Object({
         return new Promise((resolve, reject) => {
             let token = localStorage.getItem('token')
             if (token == null) {
-                reject(new Error({ message: "Token " + token + " doesn't exist in local storage" }))
+                reject(new Error({ message: "Token doesn't exist in local storage" }))
             }
             //send logout request to server to remove token there
             let url = BACKEND_URL + "auth/logout/"
             axios.post(url, {}).then(response => {
                 //logout was successful
                 console.log("Server confirmed removal of token: " + token)
-                //remove local token for this user
-                localStorage.removeItem('token')
-                axios.defaults.headers.common['Authorization'] = null
-                console.log("Token " + token + " was removed locally")
                 resolve(response)
             }).catch(error => {
-                //Token on Server couldn't be removed, or wasn't there, but we're logged out anyway
-                //remove local token for this user anyway
+                //Token on Server couldn't be removed, or wasn't there
+                reject(error)
+            }).finally(()=>{
+                //remove local token in each case
                 localStorage.removeItem('token')
                 axios.defaults.headers.common['Authorization'] = null
                 console.log("Token " + token + " was removed locally")
-                reject(error)
             })
         })
     },
