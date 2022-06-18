@@ -6,6 +6,11 @@
                 Username cannot be empty
             </div>
         </div>
+        <div class="row"><input type="text" name="email" v-model="input.email" placeholder="Email" />
+            <div v-if="v$.input.email.$error" class="alert alert-warning" role="alert">
+                Must be valid Email
+            </div>
+        </div>
         <div class="row"><input type="text" name="city" v-model="input.city" placeholder="City" />
             <div v-if="v$.input.city.$error" class="alert alert-warning" role="alert">
                 Please state your city
@@ -31,7 +36,7 @@
 
 <script>
 import useValidate from "@vuelidate/core";
-import { required, sameAs } from "@vuelidate/validators";
+import { required, sameAs, email } from "@vuelidate/validators";
 import authService from '@/services/authService';
 
 export default {
@@ -40,6 +45,7 @@ export default {
             v$: useValidate(),
             input: {
                 username: "",
+                email:"",
                 city: "",
                 password: "",
                 password2: ""
@@ -54,6 +60,7 @@ export default {
         return {
             input: {
                 username: { required },
+                email: {email, required},
                 city: {required},
                 password: { required },
                 password2: { required, sameAsPassword: sameAs(this.input.password) }

@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const BACKEND_URL = require('../../networkconfig.json').BACKEND_URL
 const authService = new Object({
     HTTPCodes: {
         OK: 200,
@@ -9,6 +8,7 @@ const authService = new Object({
         WRONG_PASSWORD: 401,
         BAD_REQUEST: 400
     },
+    BACKEND_URL: require('../../networkconfig.json').BACKEND_URL,
     isAuthenticated: function () {
         return localStorage.getItem('token') != null
     },
@@ -44,7 +44,7 @@ const authService = new Object({
     },
     register: async function (user, password, city) {
         return new Promise((resolve, reject) => {
-            axios.post('/register/auth', {
+            axios.post('user/', {
                 params: {
                     'user': user,
                     'password': password,
@@ -66,7 +66,7 @@ const authService = new Object({
                 reject(new Error({ message: "Token doesn't exist in local storage" }))
             }
             //send logout request to server to remove token there
-            let url = BACKEND_URL + "auth/logout/"
+            let url = this.BACKEND_URL + "auth/logout/"
             axios.post(url, {}).then(response => {
                 //logout was successful
                 console.log("Server confirmed removal of token: " + token)
@@ -84,7 +84,7 @@ const authService = new Object({
     },
     getUserInfo: async function (token) {
         return new Promise((resolve, reject) => {
-            let url = BACKEND_URL + "user/"
+            let url = this.BACKEND_URL + "user/"
             console.log("Sending token auth request to " + url)
             console.log("Local Token: " + token);
             axios.defaults.headers.common['Authorization'] = `Token ${token}`
