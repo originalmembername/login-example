@@ -6,7 +6,6 @@ import RegisterView from '@/views/Auth/RegisterView.vue'
 import RegisterSuccessView from '@/views/Auth/RegisterSuccessView.vue'
 import authService from '@/services/authService'
 
-
 const routes = [
   {
     path: '/test',

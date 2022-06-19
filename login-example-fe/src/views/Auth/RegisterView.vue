@@ -45,7 +45,7 @@ export default {
             v$: useValidate(),
             input: {
                 username: "",
-                email:"",
+                email: "",
                 city: "",
                 password: "",
                 password2: ""
@@ -60,8 +60,8 @@ export default {
         return {
             input: {
                 username: { required },
-                email: {email, required},
-                city: {required},
+                email: { email, required },
+                city: { required },
                 password: { required },
                 password2: { required, sameAsPassword: sameAs(this.input.password) }
             }
@@ -74,10 +74,12 @@ export default {
             //validate form, cancel if there are errors
             this.v$.$validate()
             if (this.v$.$error) {
+                console.dir(this.v$)
                 return
             }
             //send registration request to server
-            authService.register(this.input.username, this.input.password, this.input.city).then(() => {
+            console.log("Trying to register user")
+            authService.register(this.input.username, this.input.email, this.input.city, this.input.password).then(() => {
                 //user has been successfully created
                 //show success screen; pass on username to be displayed there
                 this.$router.push({ name: 'registerSuccess', params: { user: this.input.username } })

@@ -42,19 +42,20 @@ const authService = new Object({
         )
 
     },
-    register: async function (user, password, city) {
+    register: async function (username, email, city, password) {
         return new Promise((resolve, reject) => {
-            axios.post('user/', {
-                params: {
-                    'user': user,
-                    'password': password,
-                    'city': city
-                }
+            let url = this.BACKEND_URL + "user/create/"
+            axios.post(url, {
+                username: username,
+                email: email,
+                city: city,
+                password: password
             }).then(response => {
-                //registration was successful
+                //registration successful                
+                console.log(response)
                 resolve(response)
             }).catch(error => {
-                //registration was unsuccessful, pass error onto view
+                console.log(error)
                 reject(error)
             })
         })
@@ -63,10 +64,12 @@ const authService = new Object({
         return new Promise((resolve, reject) => {
             let token = localStorage.getItem('token')
             if (token == null) {
+                console.error("Local token is missing!")
                 reject(new Error({ message: "Token doesn't exist in local storage" }))
             }
             //send logout request to server to remove token there
             let url = this.BACKEND_URL + "auth/logout/"
+            axios.defaults.headers.common['Authorization'] = `Token ${token}`
             axios.post(url, {}).then(response => {
                 //logout was successful
                 console.log("Server confirmed removal of token: " + token)
@@ -74,11 +77,12 @@ const authService = new Object({
             }).catch(error => {
                 //Token on Server couldn't be removed, or wasn't there
                 reject(error)
-            }).finally(()=>{
-                //remove local token in each case
+            }).finally(() => {
+                //remove local  user & token in each case
                 localStorage.removeItem('token')
+                localStorage.removeItem('user')
                 axios.defaults.headers.common['Authorization'] = null
-                console.log("Local token should've been removed, new Auth Status "+ this.isAuthenticated())
+                console.log("Local token should've been removed, new Auth Status " + this.isAuthenticated())
             })
         })
     },
@@ -86,7 +90,7 @@ const authService = new Object({
         return new Promise((resolve, reject) => {
             let url = this.BACKEND_URL + "user/"
             console.log("Sending token auth request to " + url)
-            console.log("Local Token: " + token);
+            console.log("Local Token: " + token)
             axios.defaults.headers.common['Authorization'] = `Token ${token}`
             axios.get(url, {}).then(response => {
                 resolve(response)

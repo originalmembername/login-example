@@ -26,6 +26,7 @@ export default {
       console.log("Set Auth Status to: " + authService.isAuthenticated())
     },
     logout() {
+      console.log("Trying to log out, local token: " + authService.getToken())
       authService.logout().catch(error => {
         console.log("Something went wrong in the logout process: " + error)
       }).finally(() => {
