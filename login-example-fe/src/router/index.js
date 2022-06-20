@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/test',
     name: 'test',
-    component: () => import('@/TestComponents/HTTPRequestTest.vue'),
+    component: () => import('@/TestComponents/Profile_Pingendo.vue'),
     meta: {
       requiresAuth: false
     }
