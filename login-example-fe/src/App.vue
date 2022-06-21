@@ -41,7 +41,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./styles/variables";
+//set global style variables, override bootstrap defaults
+@import "./styles/custom_variables"; 
+@import "bootstrap/scss/bootstrap.scss";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
