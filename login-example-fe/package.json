@@ -21,8 +21,6 @@
     "https-browserify": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "msw": "^0.41.0",
-    "node-sass": "^7.0.1",
-    "sass-loader": "^13.0.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "timers-browserify": "^2.0.12",

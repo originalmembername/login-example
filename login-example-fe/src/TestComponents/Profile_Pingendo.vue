@@ -53,9 +53,3 @@
         </div>        
     </div>
 </template>
- 
-<style lang="scss">
-.btn-primary{
-    background: $primary;
-}
-</style>
