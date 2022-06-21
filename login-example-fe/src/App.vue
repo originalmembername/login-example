@@ -40,7 +40,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "./styles/variables";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
