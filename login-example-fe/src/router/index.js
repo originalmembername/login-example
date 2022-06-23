@@ -10,7 +10,15 @@ const routes = [
   {
     path: '/test',
     name: 'test',
-    component: () => import('@/TestComponents/Profile_Pingendo.vue'),
+    component: () => import('@/TestComponents/EditProfile.vue'),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/test2',
+    name: 'test2',
+    component: () => import('@/TestComponents/ModalExample.vue'),
     meta: {
       requiresAuth: false
     }
