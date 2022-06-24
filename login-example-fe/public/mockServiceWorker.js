@@ -8,6 +8,7 @@
  * - Please do NOT serve this file on production.
  */
 
+/* 
 const INTEGRITY_CHECKSUM = '02f4ad4a2797f85668baf196e553d929'
 const bypassHeaderName = 'x-msw-bypass'
 const activeClientIds = new Set()
@@ -336,3 +337,4 @@ function uuidv4() {
     return v.toString(16)
   })
 }
+ */

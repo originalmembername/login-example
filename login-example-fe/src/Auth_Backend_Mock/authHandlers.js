@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+/* import { rest } from 'msw'
 import user_db from './user_db'
 
 export const authHandlers = [
@@ -90,4 +90,4 @@ export const authHandlers = [
             ctx.text('Token successfully removed')            
         ) 
     })
-]
+] */

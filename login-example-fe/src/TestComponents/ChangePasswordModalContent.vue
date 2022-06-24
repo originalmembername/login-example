@@ -25,8 +25,9 @@
                                     <span class="form-text small text-muted">
                                         The password must be 8-20 characters, and must <em>not</em> contain spaces.
                                     </span>
-                                    <div class="alert alert-danger" role="alert" v-if="submitted && newPwdErrorMsg!=''">
-                                        {{newPwdErrorMsg}}
+                                    <div class="alert alert-danger" role="alert"
+                                        v-if="submitted && newPwdErrorMsg != ''">
+                                        {{ newPwdErrorMsg }}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -56,14 +57,25 @@
 <script>
 import { required, minLength, maxLength, sameAs } from '@vuelidate/validators'
 import useValidate from '@vuelidate/core'
+//import useVuelidate from '@vuelidate/core'
+
+// eslint-disable-next-line no-unused-vars
+const customValidations = {
+    containsUppercase: function (value) {
+        console.log(value + "contains upper case: " + /[A-Z]/.test(value))
+        if (value == "") {
+            return false
+        }
+        return !/[A-Z]/.test(value)
+    }
+}
 
 export default {
     name: 'ChangePasswordModalContent',
-    setup() {
-        return { v$: useValidate() }
-    },
     data() {
         return {
+            v$: useValidate(),
+            //           v$: useVuelidate(),
             submitted: false,
             input: {
                 oldPassword: "",
@@ -87,20 +99,12 @@ export default {
             this.submitted = true
             this.v$.$validate()
             console.dir(this.v$.input.newPassword)
-        }
-    },
-    computed: {
-        newPwdErrorMsg() {
-            let msg = ""
-            //Add message for each error
-            if (this.v$.input.newPassword.required.$invalid){
-                msg += "\nPassword cannot be empty"
-            }
-            return msg
         },
-        containsUppercase: function (value) {
-            return !/[A-Z]/.test(value)
-        },
+        /*         containsUppercase: function (value) {
+                    console.log(value + "contains upper case: " + !/[A-Z]/.test(value))
+                    // eslint-disable-next-line no-debugger
+                    return !/[A-Z]/.test(value)
+                },  */
         containsLowercase: function (value) {
             return !/[a-z]/.test(value)
         },
@@ -111,11 +115,30 @@ export default {
             return !/[#?!@$%^&*-]/.test(value)
         }
     },
+    computed: {
+        newPwdErrorMsg() {
+            let msg = ""
+            //Add message for each error
+            if (this.v$.input.newPassword.required.$invalid) {
+                msg += "\nPassword cannot be empty"
+            }
+            if (this.v$.input.newPassword.minLength.$invalid) {
+                msg += "\nPassword has to be at least 8 characters"
+            }
+            if (this.v$.input.newPassword.maxLength.$invalid) {
+                msg += "\nPassword can be at maximum 20 characters"
+            }
+            /*             if (this.v$.input.newPassword.containsUppercase.$invalid) {
+                            msg += "\nPassword must contain upper case character"
+                        } */
+            return msg
+        },
+    },
     validations() {
         return {
             input: {
                 oldPassword: { required },
-                newPassword: { required, minLength: minLength(8), maxLength: maxLength(20) },
+                newPassword: { required, minLength: minLength(8), maxLength: maxLength(20), containsUppercase: customValidations.containsUppercase(this.input.newPassword) },
                 confirmNewPassword: { required, sameAs: sameAs('newPassword') },
             }
 

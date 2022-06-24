@@ -1,4 +1,4 @@
-const user_db = new Object()
+/* const user_db = new Object()
 
 //define Map for users & passwords
 const users = new Map()
@@ -59,4 +59,4 @@ user_db.checkLogin = function (user, password) {
     }
 
 
-export default user_db
+export default user_db */
