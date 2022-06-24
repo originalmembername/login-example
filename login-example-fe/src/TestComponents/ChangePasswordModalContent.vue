@@ -23,16 +23,16 @@
                                     <input type="password" class="form-control" id="inputPasswordNew"
                                         v-model="input.newPassword">
                                     <span class="form-text small text-muted">
-                                        The password must be 8-20 characters, and must <em>not</em> contain spaces.
+                                        The password must be 8-20 characters and contain at least one: <br>
+                                        Upper case letter, lower case letter, number, special character
                                     </span>
                                     <div class="alert alert-danger" role="alert"
-                                        v-if="submitted && newPwdErrorMsg != ''">
-                                        {{ newPwdErrorMsg }}
+                                        v-if="submitted && newPwdErrorMsg != ''" v-html="newPwdErrorMsg">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPasswordNewVerify">Verify</label>
-                                    <input type="password" class="form-control" id="inputPasswordNewVerify"
+                                    <label for="inputPasswordNewVerify">Repeat new password</label>
+                                    <input type="password" class="form-control" id="repeatNewPassword"
                                         v-model="input.confirmNewPassword">
                                     <span class="form-text small text-muted">
                                         To confirm, type the new password again.
@@ -55,19 +55,17 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, sameAs } from '@vuelidate/validators'
+import { required, minLength, maxLength, sameAs, helpers } from '@vuelidate/validators'
 import useValidate from '@vuelidate/core'
-//import useVuelidate from '@vuelidate/core'
 
-// eslint-disable-next-line no-unused-vars
 const customValidations = {
-    containsUppercase: function (value) {
-        console.log(value + "contains upper case: " + /[A-Z]/.test(value))
-        if (value == "") {
-            return false
-        }
-        return !/[A-Z]/.test(value)
-    }
+    fitsExpression: (regex) =>
+        helpers.withParams(
+            { type: 'fitsExpression', value: regex },
+            (value) => {
+                return regex.test(value)
+            }
+        )
 }
 
 export default {
@@ -75,7 +73,6 @@ export default {
     data() {
         return {
             v$: useValidate(),
-            //           v$: useVuelidate(),
             submitted: false,
             input: {
                 oldPassword: "",
@@ -98,39 +95,34 @@ export default {
         submitNewPwd: async function () {
             this.submitted = true
             this.v$.$validate()
-            console.dir(this.v$.input.newPassword)
         },
-        /*         containsUppercase: function (value) {
-                    console.log(value + "contains upper case: " + !/[A-Z]/.test(value))
-                    // eslint-disable-next-line no-debugger
-                    return !/[A-Z]/.test(value)
-                },  */
-        containsLowercase: function (value) {
-            return !/[a-z]/.test(value)
-        },
-        containsNumber: function (value) {
-            return !/[0-9]/.test(value)
-        },
-        containsSpecial: function (value) {
-            return !/[#?!@$%^&*-]/.test(value)
-        }
     },
     computed: {
         newPwdErrorMsg() {
             let msg = ""
             //Add message for each error
             if (this.v$.input.newPassword.required.$invalid) {
-                msg += "\nPassword cannot be empty"
+                msg += "Password cannot be empty"
+                return msg
             }
             if (this.v$.input.newPassword.minLength.$invalid) {
-                msg += "\nPassword has to be at least 8 characters"
+                msg += "Password has to be at least 8 characters<br />"
             }
             if (this.v$.input.newPassword.maxLength.$invalid) {
-                msg += "\nPassword can be at maximum 20 characters"
+                msg += "Password can be at maximum 20 characters<br />"
             }
-            /*             if (this.v$.input.newPassword.containsUppercase.$invalid) {
-                            msg += "\nPassword must contain upper case character"
-                        } */
+            if (this.v$.input.newPassword.containsUppercase.$invalid) {
+                msg += "Password must contain upper case character<br />"
+            }
+            if (this.v$.input.newPassword.containsLowercase.$invalid) {
+                msg += "Password must contain lower case character<br />"
+            }
+            if (this.v$.input.newPassword.containsNumber.$invalid) {
+                msg += "Password must contain number<br />"
+            }
+            if (this.v$.input.newPassword.containsSpecialChar.$invalid) {
+                msg += "Password must contain special character:<br/> # ? ! @ $ € % ^ & * -"
+            }
             return msg
         },
     },
@@ -138,7 +130,13 @@ export default {
         return {
             input: {
                 oldPassword: { required },
-                newPassword: { required, minLength: minLength(8), maxLength: maxLength(20), containsUppercase: customValidations.containsUppercase(this.input.newPassword) },
+                newPassword: {
+                    required, minLength: minLength(8), maxLength: maxLength(20),
+                    containsUppercase: customValidations.fitsExpression(/[A-Z]/),
+                    containsLowercase: customValidations.fitsExpression(/[a-z]/),
+                    containsNumber: customValidations.fitsExpression(/[0-9]/),
+                    containsSpecialChar: customValidations.fitsExpression(/[#?!@$€%^&*-]/)
+                },
                 confirmNewPassword: { required, sameAs: sameAs('newPassword') },
             }
 
