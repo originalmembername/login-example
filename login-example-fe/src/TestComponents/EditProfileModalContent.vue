@@ -78,7 +78,6 @@ export default {
     name: 'EditProfileModalContent',
     methods: {
         openChangePasswordView() {
-            console.log("Using emit")
             //replace the edit-profile-view with the change-password-view
             this.$emit('show-change-password-view', true)
         }

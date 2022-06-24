@@ -29,7 +29,6 @@ export default {
     },
     methods: {
         showChangePasswordView(value){
-            console.log("Showing Chage Password View: " + value)
             this.changePasswordView = value
         }
     }
