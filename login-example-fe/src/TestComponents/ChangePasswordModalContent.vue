@@ -33,12 +33,8 @@
                                 <div class="form-group">
                                     <label for="inputPasswordNewVerify">Repeat new password</label>
                                     <input type="password" class="form-control" id="repeatNewPassword"
-                                        v-model="input.confirmNewPassword">
-                                    <span class="form-text small text-muted">
-                                        To confirm, type the new password again.
-                                    </span>
-                                    <div class="alert alert-danger" role="alert" v-if="errors.pwdNotIdentical">
-                                        Passwords don't match
+                                        v-model="input.repeatPassword">
+                                    <div class="alert alert-danger" role="alert" v-if="submitted && repeatPwdErrorMsg!=''" v-html="repeatPwdErrorMsg">
                                     </div>
                                 </div>
                             </form>
@@ -77,12 +73,10 @@ export default {
             input: {
                 oldPassword: "",
                 newPassword: "",
-                confirmNewPassword: ""
+                repeatPassword: ""
             },
             errors: {
                 oldPwdIncorrect: false,
-                pwdNotIdentical: false,
-                newPwdError: false
             }
 
         }
@@ -121,10 +115,20 @@ export default {
                 msg += "Password must contain number<br />"
             }
             if (this.v$.input.newPassword.containsSpecialChar.$invalid) {
-                msg += "Password must contain special character:<br/> # ? ! @ $ € % ^ & * -"
+                msg += "Password must contain special character:<br/> # ? ! @ $ € % ^ & * - <br/>"
+            }
+            if (this.v$.input.newPassword.noSpaces.$invalid) {
+                msg += "Password mustn't contain spaces"
             }
             return msg
         },
+        repeatPwdErrorMsg() {
+            if(this.v$.input.repeatPassword.sameAs.$invalid){
+                return "Passwords are not identical"
+            }
+            return ""
+        },
+
     },
     validations() {
         return {
@@ -135,9 +139,10 @@ export default {
                     containsUppercase: customValidations.fitsExpression(/[A-Z]/),
                     containsLowercase: customValidations.fitsExpression(/[a-z]/),
                     containsNumber: customValidations.fitsExpression(/[0-9]/),
-                    containsSpecialChar: customValidations.fitsExpression(/[#?!@$€%^&*-]/)
+                    containsSpecialChar: customValidations.fitsExpression(/[#?!@$€%^&*-]/),
+                    noSpaces: customValidations.fitsExpression(/^\S*$/)
                 },
-                confirmNewPassword: { required, sameAs: sameAs('newPassword') },
+                repeatPassword: { sameAs: sameAs(this.input.newPassword) },
             }
 
         }
