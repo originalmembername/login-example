@@ -24,15 +24,15 @@ class UserView(APIView):
 class UserCreationView(APIView):
     # create new user
     def post(self, request):
-        username = request.data.get('username')
         email = request.data.get('email')
+        username = request.data.get('username')        
         city = request.data.get('city')
         password = request.data.get('password')
         # Check if user already exists?
         # catch django.db.utils.IntegrityError:
         try:
-            user = User.objects.create_user(username=username,
-                                            email=email,
+            user = User.objects.create_user(email=email,
+                                            username=username,                                            
                                             city=city,
                                             password=password)
             user.save()
@@ -41,5 +41,5 @@ class UserCreationView(APIView):
             return HttpResponseForbidden(json.dumps("{message: 'User already exists'}"), content_type='application/json')
         # confirm creation of user
         return JsonResponse({
-            'message': "User created successfully: " + username
+            'message': "User created successfully: " + email
         })
