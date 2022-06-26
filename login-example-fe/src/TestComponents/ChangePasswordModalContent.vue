@@ -89,6 +89,11 @@ export default {
         submitNewPwd: async function () {
             this.submitted = true
             this.v$.$validate()
+            if(this.$.input.$error){
+                //Form is not valid
+                return
+            }
+            //send form content to server...
         },
     },
     computed: {
