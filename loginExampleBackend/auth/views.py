@@ -1,15 +1,11 @@
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.views import APIView
 from knox.views import LogoutView
+
+class LoginView(APIView):
+    def post(self, request):
+        return obtain_auth_token(request)
 
 class LogoutViewEx(LogoutView):
     authentication_classes = (TokenAuthentication,)
-
-# Remove token for this user
-""" def logout(request):
-    token = request.user.auth_token
-    if token:
-        #token was successfully deleted, respond with 200
-        token.delete()
-        return JsonResponse({'message': 'Token was deleted successfully'})
-    #there is no such token, return 404 error
-    return HttpResponseNotFound("No token found for this request") """
