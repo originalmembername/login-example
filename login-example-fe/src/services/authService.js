@@ -15,11 +15,11 @@ const authService = new Object({
     getToken: function () {
         return localStorage.getItem('token')
     },
-    login: async function (user, password) {
+    login: async function (email, password) {
         return new Promise((resolve, reject) => {
             axios.post("http://127.0.0.1:8000/auth/login/",
                 {
-                    username: user,
+                    email: email,
                     password: password
                 })
                 .then(response => {
@@ -27,7 +27,7 @@ const authService = new Object({
                     let token = response.data.token
                     console.log("Login accepted with token: " + token);
                     //Set authenticated to "true" and store token
-                    setAuthToken(user, token)
+                    setAuthToken(token)
                     //                    this.isAuthenticated = true
                     //                    this.token = token
                     resolve(response)
@@ -78,9 +78,8 @@ const authService = new Object({
                 //Token on Server couldn't be removed, or wasn't there
                 reject(error)
             }).finally(() => {
-                //remove local  user & token in each case
+                //remove local token in each case
                 localStorage.removeItem('token')
-                localStorage.removeItem('user')
                 axios.defaults.headers.common['Authorization'] = null
                 console.log("Local token should've been removed, new Auth Status " + this.isAuthenticated())
             })
@@ -101,11 +100,8 @@ const authService = new Object({
     }
 })
 
-function setAuthToken(user, token) {
-    //set token for this user; or token for undefined user
-    if (user) {
-        localStorage.setItem('user', user)
-    }
+function setAuthToken(token) {
+    //set token for this user
     localStorage.setItem('token', token)
     console.log("Stored new token in local storage: " + localStorage.getItem('token'))
 }

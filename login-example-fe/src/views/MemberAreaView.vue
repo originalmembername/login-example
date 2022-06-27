@@ -2,9 +2,6 @@
     <div id="member-area">
         <h1>My area</h1>
         <p>
-            Username: {{userInfo.username}}
-        </p>
-        <p>
             Email: {{userInfo.email}}
         </p>
         <p>
@@ -20,7 +17,6 @@ import authService from '@/services/authService';
         data() {
             return {
                 userInfo: {
-                    username: "",
                     email:"",
                     city: ""
                 }
@@ -38,7 +34,6 @@ import authService from '@/services/authService';
             authService.getUserInfo(token).then(response=>{
                 //request has been accepted
                 console.log("Rersponse from User Backend: " + response.data)
-                this.userInfo.username = response.data.username
                 this.userInfo.email = response.data.email
                 this.userInfo.city = response.data.city                
             }).catch(error=>{
