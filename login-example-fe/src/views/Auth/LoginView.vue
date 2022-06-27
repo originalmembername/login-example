@@ -91,7 +91,7 @@ export default {
             authService.login(email, pwd).then(() => {
                 //login was successful
                 //tell App component to update header
-                console.log("Auth Status: " + authService.isAuthenticated())
+                console.log("Login should've been successful, Auth Status: " + authService.isAuthenticated())
                 this.$emit("authenticated")
                 //forward to restricted member page                      
                 this.$router.push("/member")

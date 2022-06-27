@@ -50,11 +50,11 @@ AUTH_USER_MODEL = 'users.User'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-AUTHENTICATION_BACKENDS = ['auth.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['customAuth.backends.EmailBackend']
 
 REST_FRAMEWORK = {
    'DEFAULT_AUTHENTICATION_CLASSES': (
-       'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
    ),
 }
 
