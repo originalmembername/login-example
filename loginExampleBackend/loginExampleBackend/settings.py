@@ -43,9 +43,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'knox',
     'users',
+    'customAuth',
 ]
 
 AUTH_USER_MODEL = 'users.User'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+AUTHENTICATION_BACKENDS = ['auth.backends.EmailBackend']
 
 REST_FRAMEWORK = {
    'DEFAULT_AUTHENTICATION_CLASSES': (
