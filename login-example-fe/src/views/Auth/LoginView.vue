@@ -3,7 +3,7 @@
         <div id="logoutMessage" v-if="displayLogoutMessage">You have been successfully logged out</div>
         <form>
             <h1>Login</h1>
-            <div class="row"><input type="text" name="username" v-model="input.username" placeholder="Username" />
+            <div class="row"><input type="text" name="username" v-model="input.username" placeholder="Email or Username" />
                 <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                     Username cannot be empty
                 </div>
@@ -13,7 +13,7 @@
                     User doesn't exist
                 </div>
             </div>
-            <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" />
+            <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" v-on:keyup.enter="login" />
                 <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                     Password cannot be empty
                 </div>
@@ -27,9 +27,8 @@
                     role="alert">
                     Username or Password incorrect
                 </div>
-            </div>
-
-            <button type="button" v-on:click="login()">Login</button>
+            </div> 
+            <button type="button" v-on:click="login()" v-on:keyup.enter="login">Login</button>
         </form>
 
 
@@ -59,12 +58,6 @@ export default {
             }
         }
     },
-/*     props: {
-        justLoggedOut: {
-            type: Boolean,
-            required: false
-        }
-    }, */
     validations() {
         return {
             input: {
