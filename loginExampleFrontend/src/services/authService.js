@@ -42,15 +42,12 @@ const authService = new Object({
         )
 
     },
-    register: async function (username, email, city, password) {
+    
+    //user: The user object with info like email, username, password etc.
+    register: async function (user) {
         return new Promise((resolve, reject) => {
             let url = this.BACKEND_URL + "user/create/"
-            axios.post(url, {
-                username: username,
-                email: email,
-                city: city,
-                password: password
-            }).then(response => {
+            axios.post(url, user).then(response => {
                 //registration successful                
                 console.log(response)
                 resolve(response)

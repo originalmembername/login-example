@@ -48,7 +48,7 @@ const routes = [
     }
   },
   {
-    path: '/register/success/:user',
+    path: '/register/success/:email',
     name: 'registerSuccess',
     component: RegisterSuccessView,
     props: true,

@@ -8,24 +8,24 @@ from django.utils.translation import gettext as _
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, email, password=None, username=None, city=None):
+    def create_user(self, email, password=None, username=None, first_name=None, last_name=None, city=None):
         now = timezone.now()
         if not email:
             raise ValueError('The given email must be set')
         email = UserManager.normalize_email(email)
-        user = self.model(email=email, username=username, city=city,
+        user = self.model(email=email, username=username, first_name=first_name, last_name=last_name, city=city,
                           is_staff=False, is_active=True, is_superuser=False,
                           last_login=now, date_joined=now)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, username=None, city=None):
+    def create_superuser(self, email, password, username=None, first_name=None, last_name=None, city=None):
         now = timezone.now()
         if not email:
             raise ValueError('The given email must be set')
         email = UserManager.normalize_email(email)
-        user = self.model(email=email, username=username, city=city,
+        user = self.model(email=email, username=username,first_name=first_name, last_name=last_name, city=city,
                           is_staff=True, is_active=True, is_superuser=True,
                           last_login=now, date_joined=now)
         user.set_password(password)
@@ -37,7 +37,9 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     city = models.CharField(max_length=50, null=True)
     email = models.EmailField(_('email address'), unique=True)
-    username = models.CharField(max_length=50, null=True)
+    username = models.CharField(max_length=50, null=True, unique=True)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
 
     objects = CustomUserManager()
 
