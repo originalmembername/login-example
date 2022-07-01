@@ -21,31 +21,17 @@ class UserView(APIView):
 
 
 class UserCreationView(APIView):
+    serializer_class = CurrentUserSerializer
     # create new user
     def post(self, request):
-        email = request.data.get('email')
-        username = request.data.get('username')
-        if username == "":
-            username = None
-        city = request.data.get('city')
-        if city == "":
-            city = None
-        password = request.data.get('password')
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')
-        # Check if user already exists?
+        serializer = CurrentUserSerializer()
         try:
-            user = User.objects.create_user(email=email,
-                                            username=username,
-                                            first_name=first_name,
-                                            last_name=last_name,
-                                            city=city,
-                                            password=password)
-            user.save()
+            serializer.create(request.data)
         except IntegrityError:
             # User already exists
             return HttpResponseForbidden(json.dumps("{message: 'User already exists'}"), content_type='application/json')
         # confirm creation of user
         return JsonResponse({
-            'message': "User created successfully: " + email
+            'message': "User created successfully: " + request.data.get('email')
         })
+                
