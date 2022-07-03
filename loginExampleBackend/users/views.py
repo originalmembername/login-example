@@ -3,7 +3,6 @@ from django.db import IntegrityError
 from django.http import HttpResponseForbidden, JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from users.models import User
 from users.serializers import CurrentUserSerializer
 
 #returns user data
