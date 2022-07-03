@@ -19,6 +19,7 @@ class UserView(APIView):
         return JsonResponse(user_json, safe=False)
 
 
+#Register a new user
 class UserCreationView(APIView):
     serializer_class = CurrentUserSerializer
     # create new user

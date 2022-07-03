@@ -1,8 +1,5 @@
 import json
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
-from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response

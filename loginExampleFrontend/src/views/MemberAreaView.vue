@@ -1,11 +1,11 @@
 <template>
     <div id="member-area">
         <h1>My area</h1>
-        <p v-if="userInfo.firstName">
-            First Name: {{userInfo.firstName}}
+        <p v-if="userInfo.first_name">
+            First Name: {{userInfo.first_name}}
         </p>
-        <p p v-if="userInfo.lastName">
-            Last Name: {{userInfo.lastName}}
+        <p p v-if="userInfo.last_name">
+            Last Name: {{userInfo.last_name}}
         </p >
         <p v-if="userInfo.userName">
             Username: {{userInfo.username}}
@@ -26,11 +26,7 @@ import authService from '@/services/authService';
         data() {
             return {
                 userInfo: {
-                    firstName: "",
-                    lastName: "",
-                    username: "",
-                    email:"",
-                    city: ""
+                    //gets filled with data from server
                 }
             };
         },
@@ -45,12 +41,8 @@ import authService from '@/services/authService';
             }
             authService.getUserInfo(token).then(response=>{
                 //request has been accepted
-                //TODO: User data object from response instead of doing this manually
-                this.userInfo.username = response.data.username
-                this.userInfo.email = response.data.email
-                this.userInfo.city = response.data.city   
-                this.userInfo.firstName = response.data.first_name
-                this.userInfo.lastName = response.data.last_name             
+                this.userInfo = response.data
+                console.dir((this.userInfo))         
             }).catch(error=>{
                 //request has been rejected, trigger logout
                 console.log(error)
