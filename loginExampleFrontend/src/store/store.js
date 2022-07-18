@@ -1,8 +1,20 @@
-import { createStore } from "vuex";
-import { authModule } from "./authModule";
+import { createStore } from 'vuex'
 
-export const store = createStore({
-    modules: {
-        authModule
+// Create a new store instance.
+const store = createStore({
+  state () {
+    return {
+      isLoggedIn: false
     }
+  },
+  mutations: {
+    login (state) {
+      state.isLoggedIn = true
+    },
+    logout (state) {
+        state.isLoggedIn = false
+    }
+  }
 })
+
+export default store
