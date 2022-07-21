@@ -15,6 +15,12 @@ const authService = new Object({
     getToken: function () {
         return localStorage.getItem('token')
     },
+    /**
+     * @Deprecated Use store.login instead!
+     * @param {*} user 
+     * @param {*} password 
+     * @returns 
+     */
     login: async function (user, password) {
         return new Promise((resolve, reject) => {
             axios.post("http://127.0.0.1:8000/auth/login/",
@@ -98,6 +104,11 @@ const authService = new Object({
     }
 })
 
+/**
+ * @deprecated Use store instead
+ * @param {*} user 
+ * @param {*} token 
+ */
 function setAuthToken(user, token) {
     //set token for this user; or token for undefined user
     if (user) {
