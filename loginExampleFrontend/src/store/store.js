@@ -31,7 +31,7 @@ const store = createStore({
       state.status.isLoggedIn = false
       state.token = null
       state.user = null
-    }
+    }    
   },
   actions: {
     //login and store the user object locally
@@ -89,21 +89,23 @@ const store = createStore({
       axios.defaults.headers.common['Authorization'] = null
       console.log("Logout complete, removed local token and user info")
       commit('logoutSuccessful')
-    }
-  },
-  //TODO: Include + test
-  register({ user }) {
-    return new Promise((resolve, reject) => {
-      let url = this.BACKEND_URL + "user/create/"
-      axios.post(url, user).then(response => {
-        //registration successful                
-        console.log(response)
-        resolve(response)
-      }).catch(error => {
-        console.log(error)
-        reject(error)
+    },
+    //Register doesn't trigger a mutation in FE, but in BE, therefore is also a state change
+    register(_ , {newUser}) {
+      console.log("Trying to register new user")
+      console.dir(newUser)
+      return new Promise((resolve, reject) => {
+        let url = BACKEND_URL + "user/create/"
+        axios.post(url, newUser).then(response => {
+          //registration successful                
+          console.log(response)
+          resolve(response)
+        }).catch(error => {
+          console.log(error)
+          reject(error)
+        })
       })
-    })
+    }
   }
 })
 

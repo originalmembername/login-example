@@ -4,25 +4,26 @@
             <div class="card-body">
                 <h1>Register</h1>
                 <form action="">
-                    <div class="form-group"><input type="text" class="form-control" name="firstName" v-model="input.firstName"
-                            placeholder="First Name" />
+                    <div class="form-group"><input type="text" class="form-control" name="firstName"
+                            v-model="input.firstName" placeholder="First Name" />
                         <div v-if="v$.input.firstName.$error" class="alert alert-warning" role="alert">
                             {{ v$.input.firstName.$errors[0].$message }}
                         </div>
                     </div>
-                    <div class="form-group"><input type="text" class="form-control" name="lastName" v-model="input.lastName"
-                            placeholder="Last Name" />
+                    <div class="form-group"><input type="text" class="form-control" name="lastName"
+                            v-model="input.lastName" placeholder="Last Name" />
                         <div v-if="v$.input.lastName.$error" class="alert alert-warning" role="alert">
                             {{ v$.input.lastName.$errors[0].$message }}
                         </div>
                     </div>
-                    <div class="form-group"><input type="text" name="email" class="form-control" v-model="input.email" placeholder="Email" />
+                    <div class="form-group"><input type="text" name="email" class="form-control" v-model="input.email"
+                            placeholder="Email" />
                         <div v-if="v$.input.email.$error" class="alert alert-warning" role="alert">
                             Must be valid Email
                         </div>
                     </div>
-                    <div class="form-group"><input type="text" class="form-control" name="username" v-model="input.username"
-                            placeholder="Username (optional)" />
+                    <div class="form-group"><input type="text" class="form-control" name="username"
+                            v-model="input.username" placeholder="Username (optional)" />
                         <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                             Must be valid username
                         </div>
@@ -33,16 +34,16 @@
                             No valid city name
                         </div>
                     </div>
-                    <div class="form-group"><input type="password" class="form-control" name="password" v-model="input.password"
-                            placeholder="Password" />
-                        <small >The password must be 8-20 characters and contain at least one: <br>
+                    <div class="form-group"><input type="password" class="form-control" name="password"
+                            v-model="input.password" placeholder="Password" />
+                        <small>The password must be 8-20 characters and contain at least one: <br>
                             Upper case letter, lower case letter, number, special character</small>
                         <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                             {{ v$.input.password.$errors[0].$message }}
                         </div>
                     </div>
-                    <div class="form-group"><input type="password" class="form-control" name="password2" v-model="input.password2"
-                            placeholder="Repeat Password" />
+                    <div class="form-group"><input type="password" class="form-control" name="password2"
+                            v-model="input.password2" placeholder="Repeat Password" />
                         <div v-if="v$.input.password2.$error" class="alert alert-warning" role="alert">
                             Both passwords must be identical
                         </div>
@@ -125,7 +126,8 @@ export default {
                 city: this.input.city,
                 password: this.input.password
             }
-            authService.register(user).then(() => {
+            this.$store.dispatch('register', { newUser: user }).then(() => {
+//                authService.register(user).then(() => {
                 //user has been successfully created
                 //show success screen; pass on username to be displayed there
                 this.$router.push({ name: 'registerSuccess', params: { email: this.input.email } })
@@ -133,7 +135,7 @@ export default {
             }).catch(error => {
                 console.log("Error:")
                 console.dir(error)
-                let status = error.response.status                
+                let status = error.response.status
                 if (status == authService.HTTPCodes.DUPLICATE_USER) {
                     //User already exists
                     console.log("User already exists")

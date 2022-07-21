@@ -27,6 +27,7 @@ export default {
     logout() {
       console.log("Trying to log out, local token: " + this.$store.state.token)
       this.$store.dispatch('logout')
+      this.updateAuthStatus()
       console.log("Auth Status after logout: " + this.$store.state.status.isLoggedIn)
       //redirect to logout page
       this.$router.push({ name: 'login', params: { justLoggedOut: true } })
