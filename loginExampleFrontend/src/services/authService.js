@@ -58,6 +58,11 @@ const authService = new Object({
 
     },
 
+    /**
+     * @deprecated Use store instead (changes state of backend)
+     * @param {*} user 
+     * @returns 
+     */
     //user: The user object with info like email, username, password etc.
     register: async function (user) {
         return new Promise((resolve, reject) => {

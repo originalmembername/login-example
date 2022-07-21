@@ -51,7 +51,7 @@ const store = createStore({
             //Set user and token
             let user = JSON.stringify(
               {
-              'username': username
+                'username': username
               })
             localStorage.setItem('user', user)
             localStorage.setItem('token', token)
@@ -66,32 +66,45 @@ const store = createStore({
           })
       })
     },
-    //TODO: Use + test
-    logout({commit}) {
+    logout({ commit }) {
       //get token
-        let token = localStorage.getItem('token')
-        if (token != null) {
-          //Logout from server
-          let url = BACKEND_URL + "auth/logout/"
-          axios.defaults.headers.common['Authorization'] = `Token ${token}`
-          axios.post(url, {}).then(() => {
-            console.log("Logout from Server successful")
-          }).catch(error => {
-            console.error("Token couldn't be removed from server " + error)
-          })          
-        }
-        else {
-          //no local token, something went wrong
-          console.error("Local Token found missing while logging out")
-        }
-        //remove token and user locally
-        localStorage.user = null
-        localStorage.token = null
-        axios.defaults.headers.common['Authorization'] = null
-        console.log("Logout complete, removed local token and user info")
-        commit('logoutSuccessful')       
+      let token = localStorage.getItem('token')
+      if (token != null) {
+        //Logout from server
+        let url = BACKEND_URL + "auth/logout/"
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`
+        axios.post(url, {}).then(() => {
+          console.log("Logout from Server successful")
+        }).catch(error => {
+          console.error("Token couldn't be removed from server " + error)
+        })
+      }
+      else {
+        //no local token, something went wrong
+        console.error("Local Token found missing while logging out")
+      }
+      //remove token and user locally
+      localStorage.user = null
+      localStorage.token = null
+      axios.defaults.headers.common['Authorization'] = null
+      console.log("Logout complete, removed local token and user info")
+      commit('logoutSuccessful')
     }
   },
+  //TODO: Include + test
+  register({ user }) {
+    return new Promise((resolve, reject) => {
+      let url = this.BACKEND_URL + "user/create/"
+      axios.post(url, user).then(response => {
+        //registration successful                
+        console.log(response)
+        resolve(response)
+      }).catch(error => {
+        console.log(error)
+        reject(error)
+      })
+    })
+  }
 })
 
 export default store

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import authService from './services/authService';
 
 export default {
   name: "App",
@@ -27,14 +26,19 @@ export default {
     },
     logout() {
       console.log("Trying to log out, local token: " + this.$store.state.token)
-      authService.logout().catch(error => {
+      this.$store.dispatch('logout')
+      console.log("Auth Status after logout: " + this.$store.state.status.isLoggedIn)
+      //redirect to logout page
+      this.$router.push({ name: 'login', params: { justLoggedOut: true } })
+
+      /* authService.logout().catch(error => {
         console.log("Something went wrong in the logout process: " + error)
       }).finally(() => {
         //no matter is logout on server was successful or not, we'll log out locally
         this.authenticated = false
         console.log("Auth Status after logout: " + authService.isAuthenticated())
         this.$router.push({ name: 'login', params: { justLoggedOut: true } })
-      })
+      }) */
     },
   },
 };
