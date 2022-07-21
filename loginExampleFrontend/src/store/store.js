@@ -16,10 +16,6 @@ const userState =
 // Create a new store instance.
 const store = createStore({
   state() {
-    console.log ("token is null: " + !token)
-    console.log("Token in store: " + userState.token)
-    console.log("Token in localStorage: " + localStorage.getItem('token'))
-    console.log("userState.status.isLoggedIn: " + userState.status.isLoggedIn)
     return userState
   },
   mutations: {
@@ -36,9 +32,6 @@ const store = createStore({
       state.token = null
       state.user = null
       console.log("Logout should've been successful")
-      console.log("Token , user in LocalStorage: %s, %s", localStorage.getItem('token'), localStorage.getItem('user'))
-      console.log("Token , user in Store: %s, %s", state.token, state.user)
-      console.log("Logged in: " + state.status.isLoggedIn)
     },
     setUserInfo(state, user) {
       if (user == null) {
@@ -133,14 +126,12 @@ const store = createStore({
       }
       //get user info from server
       return new Promise((resolve, reject) => {
-        let url = this.BACKEND_URL + "user/"
+        let url = BACKEND_URL + "user/"
         console.log("Local Token: " + token)
         axios.defaults.headers.common['Authorization'] = `Token ${token}`
         axios.get(url, {}).then(response => {
           commit('setUserInfo', response.data)
           resolve(response)
-          //TODO: Do we need to return response, if userInfo is already set here? 
-          //->Let view get userInfo from store, not directly from response!
         }).catch(error => {
           reject(error)
         })
