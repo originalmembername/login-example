@@ -25,7 +25,7 @@ const authService = new Object({
         return localStorage.getItem('token')
     },
     /**
-     * @Deprecated Use store.login instead!
+     * @deprecated Use store.login instead!
      * @param {*} user 
      * @param {*} password 
      * @returns 
@@ -72,6 +72,10 @@ const authService = new Object({
             })
         })
     },
+    /**
+     * @deprecated Use store.logout instead
+     * @returns 
+     */
     logout: async function () {
         return new Promise((resolve, reject) => {
             let token = localStorage.getItem('token')

@@ -16,17 +16,17 @@ export default {
   name: "App",
   data() {
     return {
-      authenticated: authService.isAuthenticated()
+      authenticated: this.$store.state.status.isLoggedIn
     };
   },
 
   methods: {
     updateAuthStatus() {
-      this.authenticated = authService.isAuthenticated();
-      console.log("Set Auth Status to: " + authService.isAuthenticated())
+      this.authenticated = this.$store.state.status.isLoggedIn;
+      console.log("Set Auth Status to: " + this.$store.state.status.isLoggedIn)
     },
     logout() {
-      console.log("Trying to log out, local token: " + authService.getToken())
+      console.log("Trying to log out, local token: " + this.$store.state.token)
       authService.logout().catch(error => {
         console.log("Something went wrong in the logout process: " + error)
       }).finally(() => {
