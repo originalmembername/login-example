@@ -21,6 +21,7 @@ const store = createStore({
   },
   mutations: {
     loginSuccessful(state, token, user) {
+      console.log("Login successful, setting user and token")
       state.status.isLoggedIn = true
       state.token = token
       state.user = user
@@ -33,8 +34,9 @@ const store = createStore({
     }
   },
   actions: {
-    //login and store the user object locally TODO:
+    //login and store the user object locally
     login({ commit }, { username, password }) {
+      console.log('Trying to log in with username %s and password %s', username, password)
       return new Promise((resolve, reject) => {
         let url = BACKEND_URL + "auth/login/"
         axios.post(url,

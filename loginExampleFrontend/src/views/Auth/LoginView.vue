@@ -3,7 +3,8 @@
         <div id="logoutMessage" v-if="displayLogoutMessage">You have been successfully logged out</div>
         <form>
             <h1>Login</h1>
-            <div class="row"><input type="text" name="username" v-model="input.username" placeholder="Email or Username" />
+            <div class="row"><input type="text" name="username" v-model="input.username"
+                    placeholder="Email or Username" />
                 <div v-if="v$.input.username.$error" class="alert alert-warning" role="alert">
                     Username cannot be empty
                 </div>
@@ -13,7 +14,8 @@
                     User doesn't exist
                 </div>
             </div>
-            <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password" v-on:keyup.enter="login" />
+            <div class="row"><input type="password" name="password" v-model="input.password" placeholder="Password"
+                    v-on:keyup.enter="login" />
                 <div v-if="v$.input.password.$error" class="alert alert-warning" role="alert">
                     Password cannot be empty
                 </div>
@@ -23,11 +25,10 @@
                     Password incorrect
                 </div>
                 <!-- Only if Server provides general rejection of login request, w/o detail -->
-                <div v-if="errors.loginIncorrect && !v$.input.password.$error" class="alert alert-warning"
-                    role="alert">
+                <div v-if="errors.loginIncorrect && !v$.input.password.$error" class="alert alert-warning" role="alert">
                     Username or Password incorrect
                 </div>
-            </div> 
+            </div>
             <button type="button" v-on:click="login()" v-on:keyup.enter="login">Login</button>
         </form>
 
@@ -78,10 +79,11 @@ export default {
                 return
             }
             //Get username and password
-            let user = this.input.username
+            let username = this.input.username
             let pwd = this.input.password
             //try to login
-            authService.login(user, pwd).then(() => {
+            //           authService.login(user, pwd).then(() => {
+            this.$store.dispatch('login', { username:username, password:pwd }).then(() => {
                 //login was successful
                 //tell App component to update header
                 console.log("Auth Status: " + authService.isAuthenticated())
@@ -127,10 +129,10 @@ export default {
     },
     created() {
         //check if we've just been logged out
-        if(this.$route.params.justLoggedOut){
+        if (this.$route.params.justLoggedOut) {
             this.displayLogoutMessage = true
             setTimeout(() => this.displayLogoutMessage = false, 3000)
-        }        
+        }
     }
 }
 </script>
