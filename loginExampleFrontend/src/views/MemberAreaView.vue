@@ -26,17 +26,17 @@ import authService from '@/services/authService';
         data() {
             return {
                 userInfo: {
-                    //gets filled with data from server
+                    //gets filled with data from server TODO: get userInfo from store
                 }
             };
         },
         beforeCreate: function() {
             //send token to server, receive user information
-            let token = authService.getToken()            
+            let token = this.$store.state.token          
             //normally: if no local token, we shouldn't be allowed to be here by router
             if(!token){
                 console.error("There is no local token and we're still in Member view, this shouldn't happen!")
-                authService.logout()
+                this.$store.dispatch('logout')
                 return
             }
             authService.getUserInfo(token).then(response=>{
@@ -46,7 +46,7 @@ import authService from '@/services/authService';
             }).catch(error=>{
                 //request has been rejected, trigger logout
                 console.log(error)
-                authService.logout()
+                this.$store.dispatch('logout')
             })
         }
     }

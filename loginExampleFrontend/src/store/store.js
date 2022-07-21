@@ -25,13 +25,26 @@ const store = createStore({
       state.status.isLoggedIn = true
       state.token = token
       state.user = user
-
+      console.log("Token in store: " + state.token)
+      console.log("Token in LocalStorage: " + localStorage.getItem('token'))
     },
     logoutSuccessful(state) {
       state.status.isLoggedIn = false
       state.token = null
       state.user = null
-    }    
+    },
+    setUserInfo(state, user) {
+      if(user == null){
+        //this basically equals a logout
+        state.status.isLoggedIn = false
+        state.token = null
+        state.user = null
+        return
+      }
+      state.user = user
+      console.log("Set userInfo in store:")
+      console.dir(user)
+    }
   },
   actions: {
     //login and store the user object locally
@@ -59,7 +72,6 @@ const store = createStore({
             resolve(response)
           })
           .catch(error => {
-            //pass on error to view TODO: Handle error status within store
             let status = error.response.status
             console.log("Error status: " + status)
             reject(error)
@@ -91,7 +103,7 @@ const store = createStore({
       commit('logoutSuccessful')
     },
     //Register doesn't trigger a mutation in FE, but in BE, therefore is also a state change
-    register(_ , {newUser}) {
+    register(_, { newUser }) {
       console.log("Trying to register new user")
       console.dir(newUser)
       return new Promise((resolve, reject) => {
@@ -105,7 +117,28 @@ const store = createStore({
           reject(error)
         })
       })
+    },
+    fetchUserInfo({ commit }, { token = null }) {
+      if (!token) {
+        //assume token is already stored locally
+        token = this.state.token
+      }
+      //get user info from server
+      return new Promise((resolve, reject) => {
+        let url = this.BACKEND_URL + "user/"
+        console.log("Local Token: " + token)
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`
+        axios.get(url, {}).then(response => {
+          commit('setUserInfo', response.data)
+          resolve(response) 
+          //TODO: Do we need to return response, if userInfo is already set here? 
+          //->Let view get userInfo from store, not directly from response!
+        }).catch(error => {
+          reject(error)
+        })
+      })
     }
+
   }
 })
 

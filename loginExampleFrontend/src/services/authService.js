@@ -1,5 +1,8 @@
 import axios from "axios";
 
+/**
+ * @deprecated account operations should be handled by store
+ */
 const authService = new Object({
     HTTPCodes: {
         OK: 200,
