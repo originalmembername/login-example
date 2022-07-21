@@ -21,6 +21,7 @@
 
 <script>
 import authService from '@/services/authService';
+
     export default {
         name: 'MemberAreaView',
         data() {
@@ -31,17 +32,17 @@ import authService from '@/services/authService';
             };
         },
         beforeCreate: function() {
-            //send token to server, receive user information
-            let token = this.$store.state.token          
+            //send token to server, receive user information      
             //normally: if no local token, we shouldn't be allowed to be here by router
-            if(!token){
+            if(!this.$store.state.token ){
                 console.error("There is no local token and we're still in Member view, this shouldn't happen!")
                 this.$store.dispatch('logout')
                 return
             }
-            authService.getUserInfo(token).then(response=>{
+//            this.$store.dispatch('fetchUserInfo').then(response=>{
+            authService.getUserInfo(localStorage.getItem('token')).then(response=>{
                 //request has been accepted
-                this.userInfo = response.data
+                this.userInfo = response.data //TODO: Get directly from store
                 console.dir((this.userInfo))         
             }).catch(error=>{
                 //request has been rejected, trigger logout

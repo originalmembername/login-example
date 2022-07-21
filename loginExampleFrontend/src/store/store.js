@@ -7,8 +7,7 @@ const user = localStorage.getItem('user')
 const token = localStorage.getItem('token')
 //status reflects if the user is logged in
 const userState =
-  token
-    ?
+  token != null ?
     { status: { isLoggedIn: true }, token, user }
     :
     { status: { isLoggedIn: false }, token: null, user: null }
@@ -17,6 +16,10 @@ const userState =
 // Create a new store instance.
 const store = createStore({
   state() {
+    console.log ("token is null: " + !token)
+    console.log("Token in store: " + userState.token)
+    console.log("Token in localStorage: " + localStorage.getItem('token'))
+    console.log("userState.status.isLoggedIn: " + userState.status.isLoggedIn)
     return userState
   },
   mutations: {
@@ -32,9 +35,13 @@ const store = createStore({
       state.status.isLoggedIn = false
       state.token = null
       state.user = null
+      console.log("Logout should've been successful")
+      console.log("Token , user in LocalStorage: %s, %s", localStorage.getItem('token'), localStorage.getItem('user'))
+      console.log("Token , user in Store: %s, %s", state.token, state.user)
+      console.log("Logged in: " + state.status.isLoggedIn)
     },
     setUserInfo(state, user) {
-      if(user == null){
+      if (user == null) {
         //this basically equals a logout
         state.status.isLoggedIn = false
         state.token = null
@@ -94,10 +101,11 @@ const store = createStore({
       else {
         //no local token, something went wrong
         console.error("Local Token found missing while logging out")
+
       }
       //remove token and user locally
-      localStorage.user = null
-      localStorage.token = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
       axios.defaults.headers.common['Authorization'] = null
       console.log("Logout complete, removed local token and user info")
       commit('logoutSuccessful')
@@ -118,7 +126,7 @@ const store = createStore({
         })
       })
     },
-    fetchUserInfo({ commit }, { token = null }) {
+    fetchUserInfo({ commit }, token = null) {
       if (!token) {
         //assume token is already stored locally
         token = this.state.token
@@ -130,7 +138,7 @@ const store = createStore({
         axios.defaults.headers.common['Authorization'] = `Token ${token}`
         axios.get(url, {}).then(response => {
           commit('setUserInfo', response.data)
-          resolve(response) 
+          resolve(response)
           //TODO: Do we need to return response, if userInfo is already set here? 
           //->Let view get userInfo from store, not directly from response!
         }).catch(error => {
