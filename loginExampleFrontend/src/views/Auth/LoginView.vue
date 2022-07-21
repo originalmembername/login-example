@@ -82,11 +82,10 @@ export default {
             let username = this.input.username
             let pwd = this.input.password
             //try to login
-            //           authService.login(user, pwd).then(() => {
             this.$store.dispatch('login', { username:username, password:pwd }).then(() => {
                 //login was successful
                 //tell App component to update header
-                console.log("Auth Status: " + authService.isAuthenticated())
+                console.log("Auth Status: " + this.$store.state.status.isLoggedIn)
                 this.$emit("authenticated")
                 //forward to restricted member page                      
                 this.$router.push("/member")

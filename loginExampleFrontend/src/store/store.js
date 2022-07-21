@@ -55,10 +55,6 @@ const store = createStore({
               })
             localStorage.setItem('user', user)
             localStorage.setItem('token', token)
-//            setAuthToken(user, token)
-            //                    this.isAuthenticated = true
-            //                    this.token = token
-            //change state to logged in
             commit('loginSuccessful', token, user)
             resolve(response)
           })

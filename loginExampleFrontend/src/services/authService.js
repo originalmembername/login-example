@@ -9,9 +9,18 @@ const authService = new Object({
         BAD_REQUEST: 400
     },
     BACKEND_URL: require('../../networkconfig.json').BACKEND_URL,
+
+    /**
+    * @deprecated Use store.state.status.isLoggedIn instead
+    */
     isAuthenticated: function () {
         return localStorage.getItem('token') != null
     },
+
+    /**
+     * @deprecated Use store.state.token instead
+     * @returns
+     */
     getToken: function () {
         return localStorage.getItem('token')
     },
@@ -48,7 +57,7 @@ const authService = new Object({
         )
 
     },
-    
+
     //user: The user object with info like email, username, password etc.
     register: async function (user) {
         return new Promise((resolve, reject) => {

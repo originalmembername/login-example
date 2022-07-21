@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberAreView from '../views/MemberAreaView.vue'
 import LoginView from '@/views/Auth/LoginView.vue'
+import store from '@/store/store'
 import RegisterView from '@/views/Auth/RegisterView.vue'
 import RegisterSuccessView from '@/views/Auth/RegisterSuccessView.vue'
-import authService from '@/services/authService'
 
 const routes = [
   {
@@ -75,9 +75,9 @@ const router = createRouter({
  * Check for each routing if this component is restricted
  */
 router.beforeEach((to, _from, next) => {
-  console.log("Logged in: " + authService.isAuthenticated())
+  console.log("Logged in: " + store.state.status.isLoggedIn)
 
-  if (to.meta.requiresAuth && authService.isAuthenticated() == false) {
+  if (to.meta.requiresAuth && !store.state.status.isLoggedIn) {
     //we're not allowed to access this page
     console.log("Not authenticated, access denied")
     router.push('/login')
