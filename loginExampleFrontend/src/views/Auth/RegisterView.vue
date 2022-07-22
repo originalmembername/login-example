@@ -62,8 +62,8 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { required, sameAs, email, minLength, maxLength } from "@vuelidate/validators";
-import authService from '@/services/authService';
 import validations from '@/helpers/validations'
+import HTTPCodes from "@/constants/http_constants";
 
 export default {
     data() {
@@ -127,8 +127,6 @@ export default {
                 password: this.input.password
             }
             this.$store.dispatch('register', { newUser: user }).then(() => {
-//                authService.register(user).then(() => {
-                //user has been successfully created
                 //show success screen; pass on username to be displayed there
                 this.$router.push({ name: 'registerSuccess', params: { email: this.input.email } })
                 return
@@ -136,7 +134,7 @@ export default {
                 console.log("Error:")
                 console.dir(error)
                 let status = error.response.status
-                if (status == authService.HTTPCodes.DUPLICATE_USER) {
+                if (status == HTTPCodes.DUPLICATE_USER) {
                     //User already exists
                     console.log("User already exists")
                     this.errors.duplicateUser = this.input.username

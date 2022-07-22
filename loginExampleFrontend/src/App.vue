@@ -1,45 +1,25 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link>
-    <router-link v-if="authenticated" to="/member">My Area</router-link>
-    <router-link v-if="!authenticated" to="/login">Login</router-link>
-    <router-link v-if="!authenticated" to="/register">Register</router-link>
-    <router-link v-if="authenticated" to="#" v-on:click="logout()" replace>Logout</router-link>
+    <router-link v-if="$store.state.status.isLoggedIn" to="/member">My Area</router-link>
+    <router-link v-if="!$store.state.status.isLoggedIn" to="/login">Login</router-link>
+    <router-link v-if="!$store.state.status.isLoggedIn" to="/register">Register</router-link>
+    <router-link v-if="$store.state.status.isLoggedIn" to="#" v-on:click="logout()" replace>Logout</router-link>
   </nav>
-  <router-view @authenticated="updateAuthStatus" />
+  <router-view />
 </template>
 
 <script>
 
 export default {
   name: "App",
-  data() {
-    return {
-      authenticated: this.$store.state.status.isLoggedIn
-    };
-  },
-
   methods: {
-    updateAuthStatus() {
-      this.authenticated = this.$store.state.status.isLoggedIn;
-      console.log("Set Auth Status to: " + this.$store.state.status.isLoggedIn)
-    },
     logout() {
       console.log("Trying to log out, local token: " + this.$store.state.token)
       this.$store.dispatch('logout')
-      this.updateAuthStatus()
       console.log("Auth Status after logout: " + this.$store.state.status.isLoggedIn)
       //redirect to logout page
       this.$router.push({ name: 'login', params: { justLoggedOut: true } })
-
-      /* authService.logout().catch(error => {
-        console.log("Something went wrong in the logout process: " + error)
-      }).finally(() => {
-        //no matter is logout on server was successful or not, we'll log out locally
-        this.authenticated = false
-        console.log("Auth Status after logout: " + authService.isAuthenticated())
-        this.$router.push({ name: 'login', params: { justLoggedOut: true } })
-      }) */
     },
   },
 };

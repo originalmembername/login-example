@@ -40,7 +40,7 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import authService from '@/services/authService.js'
+import HTTPCodes from "@/constants/http_constants";
 
 export default {
     name: 'LoginView',
@@ -86,7 +86,6 @@ export default {
                 //login was successful
                 //tell App component to update header
                 console.log("Auth Status: " + this.$store.state.status.isLoggedIn)
-                this.$emit("authenticated")
                 //forward to restricted member page                      
                 this.$router.push("/member")
                 return
@@ -94,21 +93,21 @@ export default {
             ).catch(error => {
                 let status = error.response.status
                 console.log("Error status: " + status)
-                if (status == authService.HTTPCodes.WRONG_PASSWORD) {
+                if (status == HTTPCodes.WRONG_PASSWORD) {
                     //Wrong password
                     console.log("Wrong password")
                     this.errors.passwordIncorrect = true
                     this.resetInput()
                     return
                 }
-                if (status == authService.HTTPCodes.USER_DOESNT_EXIST) {
+                if (status == HTTPCodes.USER_DOESNT_EXIST) {
                     //user doesn't exist
                     console.log("User doesn't exist")
                     this.errors.userDoesnotExist = true
                     this.resetInput()
                     return
                 }
-                if (status == authService.HTTPCodes.BAD_REQUEST) {
+                if (status == HTTPCodes.BAD_REQUEST) {
                     //username or password wrong, no detail
                     console.log("User or password wrong")
                     this.errors.loginIncorrect = true

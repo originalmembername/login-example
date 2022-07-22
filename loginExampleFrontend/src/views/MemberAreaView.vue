@@ -22,7 +22,6 @@
 </template>
 
 <script>
-//import authService from '@/services/authService';
 
 export default {
     name: 'MemberAreaView',
@@ -39,12 +38,7 @@ export default {
             this.$store.dispatch('logout')
             return
         }
-        this.$store.dispatch('fetchUserInfo').then(() => {
-            //            authService.getUserInfo(localStorage.getItem('token')).then(response=>{
-            //request has been accepted
-            //               this.userInfo = this.$store.state.user
-            console.dir((this.userInfo))
-        }).catch(error => {
+        this.$store.dispatch('fetchUserInfo').catch(error => {
             //request has been rejected, trigger logout
             console.log(error)
             this.$store.dispatch('logout')
